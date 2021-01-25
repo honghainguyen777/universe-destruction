@@ -14,7 +14,7 @@ class Starship {
 
     getShot(destroyerInfo) {
         let starshipX = this.x + this.sizeX/2;
-        let starshipY = this.y + this.sizeY/2;
+        let starshipY = this.y + this.sizeY/2;   
         let hit = false;
         destroyerInfo.bullets.forEach((bullet, index) => {
             if (dist(starshipX, starshipY, bullet.x, bullet.y) <= this.sizeY/2) {

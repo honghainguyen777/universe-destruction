@@ -16,6 +16,8 @@ class Destroyer {
 
 
     draw() {
+        this.posX = constrain(this.posX, 0, width-this.sizeX)
+        this.posY = constrain(this.posY, 0, height-this.sizeY)
         image(this.image, this.posX, this.posY, this.sizeX, this.sizeY);
         if (keyIsDown(LEFT_ARROW)) {
             this.posX -= 5;

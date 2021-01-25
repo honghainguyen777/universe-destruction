@@ -14,7 +14,7 @@ class Game {
     
     // create a list of players later
 
-    this.destroyer = new Destroyer(WIDTH/2, HEIGHT-50, this.imageDestroyer1, this.imageBullet1);
+    this.destroyer = new Destroyer(WIDTH/2-50, HEIGHT-100, this.imageDestroyer1, this.imageBullet1);
 
     this.starships = [];
     this.objectTrack = [];
