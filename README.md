@@ -18,7 +18,7 @@ One day, in this vast universe, a strong force appears to destroy the interstell
 - Planet: 3 hits (1 hit = 4 shots) to kill Weed, the Destroyer
 - Star: 1 hit to destruct Weed, the Destroyer
 
-## Extra features (MVP approach first)
+## Extra features
 - Multiple players (max. 2)
 - Keyboard keys for first player: arrow -up, -down, -left, -right and left-mouse-click (or P) for shooting, O for using distinction package
 - Keyboard keys for second player: W-up, S-down, A-left, D-right, space-shooting, and R for using distinction package
@@ -27,8 +27,8 @@ One day, in this vast universe, a strong force appears to destroy the interstell
 - Maintaining package: +10s using upgraded gun
 - Distinction package: laser gun (uncommon - every 20-40s), blackhole gun (rare every 40-60s), instant extinction (very rare, 60-120s)
 
-## Order of coding priority
-### Step 1: Basic functionalities
+## Order of coding priority (MVP approach)
+### Step 1: Basic functionalities (Minimal version)
 - 1 Weed, the Destroyer (moving, shooting) - class Destroyer
 - Alliance starships (vertical moving and shooting) - class Starship
 - Game class
