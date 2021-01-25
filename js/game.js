@@ -7,6 +7,7 @@ class Game {
     this.imageDestroyer2;
     this.imageBullet1;
     this.imageBullet2;
+    // this.start = false;
   }
 
   setup() {
@@ -29,6 +30,11 @@ class Game {
   }
 
   preload() {
+    // Loading images - before starting the game
+
+    // load shield
+    this.shield = loadImage('assets/spaceships/shield.png');
+
     this.backgroundImage = loadImage('assets/background/space1.png');
     this.starshipImg = loadImage('assets/spaceships/starship.png');
     this.imageDestroyer1 = loadImage('assets/spaceships/destroyer1.png');
@@ -59,6 +65,9 @@ class Game {
       }
       return true;
     })
+
+    this.shieldStatus(this.destroyer);
+    this.levelUp(this.destroyer)
 
     if (this.destroyer.isLost()) {
       // performing stop here -> loose
@@ -94,20 +103,49 @@ class Game {
     }
   }
 
-  // drawGrid() {
-  //   // Iteration 1
-  //   // Draw the grid
-  //   // https://p5js.org/reference/#/p5/line
-  //   let step = 0;
-  //   // width equals height
-  //   while(step < WIDTH+1) {
-  //     // horizontal lines
-  //     line(0, step, WIDTH, step);
-  //     // vertical lines
-  //     line(step, 0 , step, WIDTH);
-  //     step += 100;
-  //   }
-  // }
+  shieldStatus(destroyer) {
+    image(this.shield, 10, 10, 50, 50);
+    colorMode(RGB, 60);
+    fill(255, 255, 255, 0);
+    rect(60, 15, 120, 33);
+    fill(0, 143, 17, 100);
+    rect(60, 15, destroyer.shield * 120/100, 33)
+    fill(255, 165, 0, 100);
+    textSize(28);
+    textFont('Orbitron')
+    textStyle(BOLD);
+    if (destroyer.shield === 100) {
+      text(`${destroyer.shield}%`, 80, 41);
+    } else if (destroyer.shield < 100 && destroyer.shield > 0) {
+      text(`${destroyer.shield}%`, 95, 41);
+    } else {
+      text(`${destroyer.shield}%`, 105, 41);
+    }
+  }
+
+  levelUp(destroyer) {
+    textSize(28);
+    textFont('Orbitron')
+    textStyle(BOLD);
+    text(`LV ${destroyer.level}`, 200, 41);
+
+    colorMode(RGB, 60);
+    fill(255, 255, 255, 0);
+    rect(60, 15, 120, 33);
+    fill(0, 143, 17, 100);
+    rect(60, 15, destroyer.shield * 120/100, 33)
+    fill(255, 165, 0, 100);
+    textSize(28);
+    textFont('Orbitron')
+    textStyle(BOLD);
+    if (destroyer.shield === 100) {
+      text(`${destroyer.shield}%`, 80, 41);
+    } else if (destroyer.shield < 100 && destroyer.shield > 0) {
+      text(`${destroyer.shield}%`, 95, 41);
+    } else {
+      text(`${destroyer.shield}%`, 105, 41);
+    }
+  }
 
   keyPressed() {
     if (keyCode === 32) {
