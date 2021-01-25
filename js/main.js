@@ -14,9 +14,14 @@ function draw() {
     clear();
     game.drawGrid();
     destroyer1.draw();
+    destroyer1.multipleFires()
 }
 
 function keyPressed() {
+    if (keyCode === 32) {
+        console.log(keyCode);
+        destroyer1.fireBullet();
+    }
     if (keyCode === 38) {
         destroyer1.moveUp();
     }

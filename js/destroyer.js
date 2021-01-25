@@ -4,12 +4,17 @@ class Destroyer {
         this.posY = posY;
         this.image;
         this.imageUpgraded;
+        this.imageBullet;
         this.sizeX = 50;
         this.sizeY = 50;
+        this.bullets = [];
+        this.bulletSizeX = 4;
+        this.bulletSizeY = 20;
     }
 
     preload() {
         this.image = loadImage('assets/spaceships/spaceship_weed1.png');
+        this.imageBullet = loadImage('assets/lasers/laserBlue.png');
     }
 
     draw() {
@@ -28,6 +33,29 @@ class Destroyer {
     
         if (keyIsDown(DOWN_ARROW)) {
             this.posY += 5;
+        }
+    }
+
+    fireBullet() {
+        let bullet = {x: this.posX + this.sizeX/2, y: this.posY}
+        this.bullets.push(bullet);
+    }
+
+    // bulletDraw(bullet) {
+    //     image(this.imageBullet, bullet.x, bullet.y, this.bulletSizeX, this.bulletSizeY);
+    // }
+
+    multipleFires() {
+        if (this.bullets.length > 0) {
+            let clonedBullets = this.bullets.slice();
+            clonedBullets.forEach((bullet, index) => {
+                image(this.imageBullet, bullet.x, bullet.y, this.bulletSizeX, this.bulletSizeY);
+                bullet.y -= 15;
+                console.log('fire');
+                if (bullet.y < 0) {
+                    this.bullets.splice(index, 1);
+                }
+            })
         }
     }
 
