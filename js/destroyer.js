@@ -5,8 +5,8 @@ class Destroyer {
         this.image;
         this.imageUpgraded;
         this.imageBullet;
-        this.sizeX = 50;
-        this.sizeY = 50;
+        this.sizeX = 70;
+        this.sizeY = 60;
         this.bullets = [];
         this.bulletSizeX = 4;
         this.bulletSizeY = 20;
@@ -37,13 +37,9 @@ class Destroyer {
     }
 
     fireBullet() {
-        let bullet = {x: this.posX + this.sizeX/2, y: this.posY}
+        let bullet = {x: this.posX + this.sizeX/2 - this.bulletSizeX/2, y: this.posY}
         this.bullets.push(bullet);
     }
-
-    // bulletDraw(bullet) {
-    //     image(this.imageBullet, bullet.x, bullet.y, this.bulletSizeX, this.bulletSizeY);
-    // }
 
     multipleFires() {
         if (this.bullets.length > 0) {

@@ -4,10 +4,12 @@ const destroyer1 = new Destroyer(WIDTH/2, HEIGHT-50);
 function setup() {
     let canvas = createCanvas(WIDTH, HEIGHT);
     canvas.parent("canvas");
+    game.starshipGen();
 }
 
 function preload() {
     destroyer1.preload();
+    game.preload();
 }
 
 function draw() {
@@ -15,6 +17,7 @@ function draw() {
     game.drawGrid();
     destroyer1.draw();
     destroyer1.multipleFires()
+    game.drawStarship();
 }
 
 function keyPressed() {
