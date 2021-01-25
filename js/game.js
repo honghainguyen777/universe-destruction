@@ -8,6 +8,8 @@ class Game {
     this.imageBullet1;
     this.imageBullet2;
     // this.start = false;
+    // if 2 players -> allow three lives for both of them
+    this.lives = 1;
   }
 
   setup() {
@@ -27,6 +29,7 @@ class Game {
     // the SetInterval
     this.interval;
     this.starshipGen();
+    this.difficultyLevel = 1;
   }
 
   preload() {
@@ -55,8 +58,9 @@ class Game {
       if (starship.getShot(this.destroyer)) {
         return false;
       }
-      // let it here for further scoring
+      // starship passed -> your mother ship is going to be destroyed, your shield down
       if (starship.y > height + starship.sizeY) {
+        this.destroyer.shield -= 2;
         return false;
       }
 
@@ -80,7 +84,7 @@ class Game {
       let n = Math.floor(Math.random() * this.maxStarshipsApprear) + 1;
       let noStarships = 0;
       while(noStarships < n) {
-        let starship = new Starship(this.starshipImg);
+        let starship = new Starship(this.starshipImg, this.difficultyLevel);
         if (!this.objectTrack.includes(starship.x)) {
           this.starships.push(starship);
           this.objectTrack.push(starship.x);
@@ -106,14 +110,23 @@ class Game {
   shieldStatus(destroyer) {
     image(this.shield, 10, 10, 50, 50);
     colorMode(RGB, 60);
-    fill(255, 255, 255, 0);
+    fill(255, 255, 255, 10);
     rect(60, 15, 120, 33);
-    fill(0, 143, 17, 100);
+
+    // turn red if shield < 40%
+    if (destroyer.shield < 40) {
+      fill(255, 0, 0);
+    } else {
+      fill(0, 143, 17);
+    }
+
     rect(60, 15, destroyer.shield * 120/100, 33)
+    // text
     fill(255, 165, 0, 100);
     textSize(28);
     textFont('Orbitron')
     textStyle(BOLD);
+    // Center the text in the middle of the progress bar
     if (destroyer.shield === 100) {
       text(`${destroyer.shield}%`, 80, 41);
     } else if (destroyer.shield < 100 && destroyer.shield > 0) {
@@ -124,26 +137,30 @@ class Game {
   }
 
   levelUp(destroyer) {
-    textSize(28);
-    textFont('Orbitron')
-    textStyle(BOLD);
-    text(`LV ${destroyer.level}`, 200, 41);
+    let lvlScores = BASED_SCORE * 2** this.difficultyLevel;
+    text(`LV ${this.difficultyLevel}:`, 240, 41);
 
+    fill(255, 255, 255, 10);
+    rect(325, 15, 120, 33);
+    colorMode(RGB, 100);
+    fill(255, 166, 77);
+    rect(325, 15, destroyer.scores * 120/lvlScores, 33)
+    
     colorMode(RGB, 60);
-    fill(255, 255, 255, 0);
-    rect(60, 15, 120, 33);
-    fill(0, 143, 17, 100);
-    rect(60, 15, destroyer.shield * 120/100, 33)
-    fill(255, 165, 0, 100);
-    textSize(28);
-    textFont('Orbitron')
-    textStyle(BOLD);
-    if (destroyer.shield === 100) {
-      text(`${destroyer.shield}%`, 80, 41);
-    } else if (destroyer.shield < 100 && destroyer.shield > 0) {
-      text(`${destroyer.shield}%`, 95, 41);
+    fill(0, 128, 0);
+    textSize(23);
+    if (destroyer.scores > 999) {
+      text(`${destroyer.scores}`, 352, 39);
+    } else if (destroyer.scores < 1000 && destroyer.scores >= 100) {
+      text(`${destroyer.scores}`, 355, 39);
+    } else if (destroyer.scores < 100 && destroyer.scores >= 10) {
+      text(`${destroyer.scores}`, 362, 39);
     } else {
-      text(`${destroyer.shield}%`, 105, 41);
+      text(`${destroyer.scores}`, 375, 39);
+    }
+
+    if (destroyer.scores > lvlScores) {
+      this.difficultyLevel++;
     }
   }
 

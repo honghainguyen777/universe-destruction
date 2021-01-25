@@ -1,14 +1,15 @@
 class Starship {
-    constructor(image) {
+    constructor(image, difficultyLevel) {
         this.sizeX = 60;
         this.sizeY = 60;
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = 0;
         this.image = image;
+        this.difficultyLevel = difficultyLevel;
     }
 
     draw() {
-        this.y++;
+        this.y += this.difficultyLevel;
         image(this.image, this.x, this.y, this.sizeX, this.sizeY);
     }
 
@@ -40,5 +41,4 @@ class Starship {
             return false;
         }
     }
-
 }

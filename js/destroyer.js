@@ -12,7 +12,6 @@ class Destroyer {
         this.bulletSizeY = 30;
         this.scores = 0;
         this.shield = 100;
-        this.level = 1;
     }
 
 
