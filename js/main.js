@@ -1,40 +1,24 @@
 const game = new Game();
-const destroyer1 = new Destroyer(WIDTH/2, HEIGHT-50);
+// const destroyer1 = new Destroyer(WIDTH/2, HEIGHT-50);
 
 function setup() {
     let canvas = createCanvas(WIDTH, HEIGHT);
     canvas.parent("canvas");
-    game.starshipGen();
+    game.setup();
 }
 
 function preload() {
-    destroyer1.preload();
     game.preload();
 }
 
 function draw() {
     clear();
-    game.drawGrid();
-    destroyer1.draw();
-    destroyer1.multipleFires()
-    game.drawStarship();
+    game.draw();
 }
 
 function keyPressed() {
-    if (keyCode === 32) {
-        console.log(keyCode);
-        destroyer1.fireBullet();
-    }
-    if (keyCode === 38) {
-        destroyer1.moveUp();
-    }
-    if (keyCode === 40) {
-        destroyer1.moveDown();
-    }
-    if (keyCode === 37) {
-        destroyer1.moveLeft();
-    }
-    if (keyCode === 39) {
-        destroyer1.moveRight();
-    }
+    game.keyPressed();
 }
+
+// make sheld reduce if collision 10% if get 1 shot, 20% in hit to starship
+// if number of of starship passed too many --> loose the game

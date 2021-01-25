@@ -1,21 +1,22 @@
 class Destroyer {
-    constructor(posX, posY) {
+    constructor(posX, posY, imageDestroyer, imageBullet) {
         this.posX = posX;
         this.posY = posY;
-        this.image;
+        this.image =imageDestroyer;
         this.imageUpgraded;
-        this.imageBullet;
+        this.imageBullet = imageBullet;
         this.sizeX = 70;
         this.sizeY = 60;
         this.bullets = [];
         this.bulletSizeX = 4;
         this.bulletSizeY = 20;
+        this.scores = 0;
     }
 
-    preload() {
-        this.image = loadImage('assets/spaceships/spaceship_weed1.png');
-        this.imageBullet = loadImage('assets/lasers/laserBlue.png');
-    }
+    // preload() {
+    //     this.image = loadImage('assets/spaceships/spaceship_weed1.png');
+    //     this.imageBullet = loadImage('assets/lasers/laserBlue.png');
+    // }
 
     draw() {
         image(this.image, this.posX, this.posY, this.sizeX, this.sizeY);
@@ -47,7 +48,6 @@ class Destroyer {
             clonedBullets.forEach((bullet, index) => {
                 image(this.imageBullet, bullet.x, bullet.y, this.bulletSizeX, this.bulletSizeY);
                 bullet.y -= 15;
-                console.log('fire');
                 if (bullet.y < 0) {
                     this.bullets.splice(index, 1);
                 }
