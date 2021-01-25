@@ -5,19 +5,15 @@ class Destroyer {
         this.image =imageDestroyer;
         this.imageUpgraded;
         this.imageBullet = imageBullet;
-        this.sizeX = 70;
-        this.sizeY = 60;
+        this.sizeX = 112;
+        this.sizeY = 75;
         this.bullets = [];
-        this.bulletSizeX = 4;
-        this.bulletSizeY = 20;
+        this.bulletSizeX = 7;
+        this.bulletSizeY = 30;
         this.scores = 0;
         this.shield = 100;
     }
 
-    // preload() {
-    //     this.image = loadImage('assets/spaceships/spaceship_weed1.png');
-    //     this.imageBullet = loadImage('assets/lasers/laserBlue.png');
-    // }
 
     draw() {
         image(this.image, this.posX, this.posY, this.sizeX, this.sizeY);
@@ -54,6 +50,13 @@ class Destroyer {
                 }
             })
         }
+    }
+
+    isLost() {
+        if (this.shield < 0) {
+            return true;
+        }
+        return false;
     }
 
     moveUp() {

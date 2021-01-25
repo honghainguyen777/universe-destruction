@@ -1,13 +1,12 @@
 class Game {
 
   constructor() {
+    this.backgroundImage;
     this.starshipImg;
     this.imageDestroyer1;
     this.imageDestroyer2;
     this.imageBullet1;
     this.imageBullet2;
-
-    
   }
 
   setup() {
@@ -30,16 +29,17 @@ class Game {
   }
 
   preload() {
-    this.starshipImg = loadImage('assets/spaceships/spaceship_starship.png');
-    this.imageDestroyer1 = loadImage('assets/spaceships/spaceship_weed1.png');
-    this.imageDestroyer2 = loadImage('assets/spaceships/spaceship_weed2.png');
-    this.imageBullet1 = loadImage('assets/lasers/laserBlue.png');
+    this.backgroundImage = loadImage('assets/background/space1.png');
+    this.starshipImg = loadImage('assets/spaceships/starship.png');
+    this.imageDestroyer1 = loadImage('assets/spaceships/destroyer1.png');
+    this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
+    this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
   }
 
 
   draw() {
-    this.drawGrid();
+    // this.drawGrid();
     this.drawStarship();
 
     this.destroyer.draw();
@@ -55,11 +55,14 @@ class Game {
       }
 
       if (starship.getHit(this.destroyer)) {
-        console.log(this.destroyer.shield)
         return false;
       }
       return true;
     })
+
+    if (this.destroyer.isLost()) {
+      // performing stop here -> loose
+    }
   }
 
   // starships generator -> can use to generate planet and stars
@@ -91,20 +94,20 @@ class Game {
     }
   }
 
-  drawGrid() {
-    // Iteration 1
-    // Draw the grid
-    // https://p5js.org/reference/#/p5/line
-    let step = 0;
-    // width equals height
-    while(step < WIDTH+1) {
-      // horizontal lines
-      line(0, step, WIDTH, step);
-      // vertical lines
-      line(step, 0 , step, WIDTH);
-      step += 100;
-    }
-  }
+  // drawGrid() {
+  //   // Iteration 1
+  //   // Draw the grid
+  //   // https://p5js.org/reference/#/p5/line
+  //   let step = 0;
+  //   // width equals height
+  //   while(step < WIDTH+1) {
+  //     // horizontal lines
+  //     line(0, step, WIDTH, step);
+  //     // vertical lines
+  //     line(step, 0 , step, WIDTH);
+  //     step += 100;
+  //   }
+  // }
 
   keyPressed() {
     if (keyCode === 32) {

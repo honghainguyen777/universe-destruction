@@ -1,7 +1,7 @@
 class Starship {
     constructor(image) {
-        this.sizeX = 50;
-        this.sizeY = 50;
+        this.sizeX = 60;
+        this.sizeY = 60;
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = 0;
         this.image = image;

@@ -13,7 +13,9 @@ function preload() {
 
 function draw() {
     clear();
+    background(game.backgroundImage);
     game.draw();
+    
 }
 
 function keyPressed() {
