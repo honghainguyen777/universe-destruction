@@ -14,6 +14,21 @@ class Destroyer {
 
     draw() {
         image(this.image, this.posX, this.posY, this.sizeX, this.sizeY);
+        if (keyIsDown(LEFT_ARROW)) {
+            this.posX -= 5;
+        }
+    
+        if (keyIsDown(RIGHT_ARROW)) {
+            this.posX += 5;
+        }
+    
+        if (keyIsDown(UP_ARROW)) {
+            this.posY -= 5;
+        }
+    
+        if (keyIsDown(DOWN_ARROW)) {
+            this.posY += 5;
+        }
     }
 
     moveUp() {
