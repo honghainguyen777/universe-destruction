@@ -11,6 +11,7 @@ class Destroyer {
         this.bulletSizeX = 4;
         this.bulletSizeY = 20;
         this.scores = 0;
+        this.shield = 100;
     }
 
     // preload() {

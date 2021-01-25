@@ -53,18 +53,13 @@ class Game {
       if (starship.y > height + starship.sizeY) {
         return false;
       }
-      console.log(this.destroyer.scores)
+
+      if (starship.getHit(this.destroyer)) {
+        console.log(this.destroyer.shield)
+        return false;
+      }
       return true;
-
     })
-
-    // this.starships.forEach((starship, index) => {
-    //   if (starship.getShot(this.destroyer)) {
-    //     console.log(starship.getShot(this.destroyer))
-    //     console.log('hit')
-    //     this.starships.filter();
-    //   };
-    // })
   }
 
   // starships generator -> can use to generate planet and stars
