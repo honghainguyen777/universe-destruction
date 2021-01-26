@@ -8,6 +8,7 @@ class Game {
     this.imageBullet1;
     this.imageBullet2;
     this.start = false;
+    this.end = false;
     // if 2 players -> allow three lives for both of them
     this.lives = 1;
   }
@@ -33,27 +34,29 @@ class Game {
   }
 
   preload() {
-    // Loading images - before starting the game
-
-    // load shield
     this.shield = loadImage('assets/spaceships/shield.png');
-
     this.backgroundImage = loadImage('assets/background/space1.png');
     this.starshipImg = loadImage('assets/spaceships/starship.png');
     this.imageDestroyer1 = loadImage('assets/spaceships/destroyer1.png');
     this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
-    this.start1 = loadImage('assets/startImg/travel.gif')
+    this.start1 = loadImage('assets/startImg/travel.gif');
+    this.youLose = loadImage('assets/endImgs/youLose.gif');
+    this.youLoseBgr = loadImage('assets/endImgs/youLostBgr.gif');
   }
 
 
   draw() {
     if (!this.start) {
-      this.preStart();
+      if (!this.end) {
+        this.preStart();
+      } else {
+        this.endGame();
+      }
     } else {
+      console.log("draw")
       this.drawStarship();
-
       this.destroyer.draw();
       this.destroyer.multipleFires()
 
@@ -61,7 +64,7 @@ class Game {
         if (starship.getShot(this.destroyer)) {
           return false;
         }
-        // starship passed -> your mother ship is going to be destroyed, your shield down
+        // starship passed -> mother ship is going to be destroyed, the shield is down
         if (starship.y > height + starship.sizeY) {
           this.destroyer.shield -= 2;
           return false;
@@ -76,33 +79,75 @@ class Game {
       this.shieldStatus(this.destroyer);
       this.levelUp(this.destroyer)
 
-      if (this.destroyer.isLost()) {
-        // performing stop here -> loose
+      if (this.destroyer.shield < 0) {
+        this.end = true;
+        this.start = false;
       }
     }
   }
 
   // before starting the game
   preStart() {
-        background(this.start1);
-        // background(game.backgroundImage);
-        image(this.imageDestroyer1, width/2-112, height-300, 224, 150);
-        textStyle(BOLD);
-        textFont('Potta One');
-        textSize(60);
-        text('Universe Destruction', 70, 100);
+    background(this.start1);
+    // background(game.backgroundImage);
+    image(this.imageDestroyer1, width/2-112, height-300, 224, 150);
+    textStyle(BOLD);
+    textFont('Potta One');
+    textSize(60);
+    text('Universe Destruction', 70, 100);
 
-        
-        textSize(42);
-        fill("#00af91")
-        text('PRESS ENTER KEY TO START', 80, height/1.4);
+    
+    textSize(42);
+    fill("#00af91")
+    text('PRESS ENTER KEY TO START', 80, height/1.4);
 
-        textFont('Orbitron')
-        textSize(35);
-        fill("white");
-        text('Weed, The Destroyer', width/4+10, height-100);
-        textSize(26);
-        text("Don't feel bad when wiping all civilizations ", width/6, height-50);
+    textFont('Orbitron')
+    textSize(35);
+    fill("white");
+    text('Weed, The Destroyer', width/4+10, height-100);
+    textSize(26);
+    text("Don't feel bad when wiping all civilizations ", width/6, height-50);
+  }
+
+  endGame() {
+    // gameover, Your shield is down,
+    background(this.youLoseBgr);
+    textFont('Potta One');
+    textSize(60);
+    text('YOU LOSE!', 240, 120);
+    
+    textFont('Orbitron')
+    textSize(45);
+    text(`Your scores: ${this.destroyer.scores}`, width/4+10, 250);
+
+    // Ranking list, later
+
+    image(this.youLose, 0, height/2-(width*0.562/2), width, width*0.562);
+
+    textFont('Potta One');
+    textSize(50);
+    text('PRESS M TO REVENGE', 110, height/2 + (width*0.562/2) + 100);
+
+
+    textFont('Orbitron')
+    textSize(35);
+    fill("white");
+    text('Weed, The Destroyer', width/4+10, height-100);
+    textSize(26);
+    text("Don't feel bad when wiping all civilizations ", width/6, height-50);
+    // Mission incomplete
+    // Your scores
+    // Highest score
+  }
+
+  // universe code --> destroy to end the game
+  // specify which level to appear universe code
+  winGame() {
+
+  }
+
+  instruction() {
+
   }
 
   // starships generator -> can use to generate planet and stars
@@ -119,16 +164,13 @@ class Game {
             noStarships++;
           }
         }
-        // for (let i=0; i<n; i++) {
-
-        //   this.starships.push(new Starship(this.starshipImg));
-        // }
         this.objectTrack = []
       }
       
     }, this.durationStarship * 1000);
   }
 
+  // draw all starship based on their current positions
   drawStarship() {
     if (this.starships.length) {
       this.starships.forEach(starship => {
@@ -151,7 +193,6 @@ class Game {
     }
 
     rect(60, 15, destroyer.shield * 120/100, 33)
-    // text
     fill(255, 165, 0, 100);
     textSize(28);
     textFont('Orbitron')
