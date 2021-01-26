@@ -42,13 +42,17 @@ class Game {
     this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
+    this.explosionImg = loadImage('assets/spaceships/explosionImg.png')
     this.start1 = loadImage('assets/startImg/travel.gif');
     // reduce size of this gif
     this.youLose = loadImage('assets/endImgs/youLose.gif');
     this.youLoseBgr = loadImage('assets/endImgs/youLostBgr.gif');
     
     this.shootingSound = loadSound('assets/musics/shootingSound.ogg');
-    this.backgroundSound = loadSound('assets/musics/background.mp3')
+    this.backgroundSound = loadSound('assets/musics/background.mp3');
+    this.gameoverSound = loadSound('assets/musics/gameover.mp3');
+    this.explosionSound1 = loadSound('assets/musics/explosion1.mp3')
+    this.explosionSound1.setVolume(0.2);
   }
 
 
@@ -66,6 +70,8 @@ class Game {
 
       this.starships = this.starships.filter(starship => {
         if (starship.getShot(this.destroyer)) {
+          image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+          this.explosionSound1.play();
           return false;
         }
         // starship passed -> mother ship is going to be destroyed, the shield is down
@@ -75,6 +81,8 @@ class Game {
         }
 
         if (starship.getHit(this.destroyer)) {
+          image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+          this.explosionSound1.play();
           return false;
         }
         return true;
@@ -84,7 +92,9 @@ class Game {
       this.levelUp(this.destroyer)
 
       if (this.destroyer.shield < 0) {
-        this.shootingSound.stop()
+        this.backgroundSound.stop()
+        this.gameoverSound.setVolume(0.5)
+        this.gameoverSound.play();
         this.end = true;
         this.start = false;
         
