@@ -1,12 +1,6 @@
 class Game {
 
   constructor() {
-    this.backgroundImage;
-    this.starshipImg;
-    this.imageDestroyer1;
-    this.imageDestroyer2;
-    this.imageBullet1;
-    this.imageBullet2;
     this.start = false;
     this.end = false;
     this.won = false;
@@ -42,8 +36,10 @@ class Game {
     this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
+    this.starshipBullet = loadImage('assets/lasers/laserRed.png');
     this.explosionImg = loadImage('assets/spaceships/explosionImg.png')
     this.start1 = loadImage('assets/startImg/travel.gif');
+    
     // reduce size of this gif
     this.youLose = loadImage('assets/endImgs/youLose.gif');
     this.youLoseBgr = loadImage('assets/endImgs/youLostBgr.gif');
@@ -52,7 +48,12 @@ class Game {
     this.backgroundSound = loadSound('assets/musics/background.mp3');
     this.gameoverSound = loadSound('assets/musics/gameover.mp3');
     this.explosionSound1 = loadSound('assets/musics/explosion1.mp3')
+    //shield
+    this.shieldDownSound = loadSound('assets/musics/shieldDown.ogg');
+    this.shieldUpSound = loadSound('assets/musics/shieldUp.ogg');
     this.explosionSound1.setVolume(0.2);
+    this.gameoverSound.setVolume(0.5)
+    this.backgroundSound.setVolume(0.3)
   }
 
 
@@ -72,19 +73,24 @@ class Game {
         if (starship.getShot(this.destroyer)) {
           image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
           this.explosionSound1.play();
+          // clearInterval(starship.fireGen);
           return false;
         }
         // starship passed -> mother ship is going to be destroyed, the shield is down
         if (starship.y > height + starship.sizeY) {
           this.destroyer.shield -= 2;
+          this.shieldDownSound.play();
           return false;
         }
 
         if (starship.getHit(this.destroyer)) {
           image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
           this.explosionSound1.play();
+          this.shieldDownSound.play();
           return false;
         }
+        // too heavy task to load when using explosion effects here
+        starship.multipleFires(this.destroyer);
         return true;
       })
 
@@ -93,7 +99,6 @@ class Game {
 
       if (this.destroyer.shield < 0) {
         this.backgroundSound.stop()
-        this.gameoverSound.setVolume(0.5)
         this.gameoverSound.play();
         this.end = true;
         this.start = false;
@@ -164,14 +169,16 @@ class Game {
   }
 
   // starships generator -> can use to generate planet and stars
+  // once a starship generated, it starts fire its three bullets
   starshipGen() {
     this.interval = setInterval(() => {
       if (this.start) {
         let n = Math.floor(Math.random() * this.maxStarshipsApprear) + 1;
         let noStarships = 0;
         while(noStarships < n) {
-          let starship = new Starship(this.starshipImg, this.difficultyLevel);
+          let starship = new Starship(this.starshipImg, this.difficultyLevel, this.starshipBullet);
           if (!this.objectTrack.includes(starship.x)) {
+            starship.firesGeneration();
             this.starships.push(starship);
             this.objectTrack.push(starship.x);
             noStarships++;
@@ -182,6 +189,7 @@ class Game {
       
     }, this.durationStarship * 1000);
   }
+
 
   // draw all starship based on their current positions
   drawStarship() {
@@ -251,7 +259,6 @@ class Game {
   keyPressed() {
     if (keyCode === 13) {
       this.start = true;
-      this.backgroundSound.setVolume(0.3)
       this.backgroundSound.loop();
     }
 
