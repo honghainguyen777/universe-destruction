@@ -36,7 +36,7 @@ class Starship {
     firesGeneration() {
         this.fireGen = setInterval(() => {
             this.fireBullet();
-        }, (this.interval+1)*1000)
+        }, (this.interval)*1000)
     }
 
     multipleFires(destroyerInfor) {
@@ -60,15 +60,6 @@ class Starship {
                     return true;
                 }
             })
-
-            // let clonedBullets = this.bullets.slice();
-            // clonedBullets.forEach((bullet, index) => {
-            //     image(this.imageBullet, bullet.x, bullet.y, this.bulletSizeX, this.bulletSizeY);
-            //     bullet.y -= 15;
-            //     if (bullet.y < 0) {
-            //         this.bullets.splice(index, 1);
-            //     }
-            // })
         }
     }
 

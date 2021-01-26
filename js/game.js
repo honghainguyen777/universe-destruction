@@ -16,15 +16,21 @@ class Game {
     this.destroyer = new Destroyer(WIDTH/2-50, HEIGHT-100, this.imageDestroyer1, this.imageBullet1);
 
     this.starships = [];
+    this.planets = [];
     this.objectTrack = [];
-    // when starship appear alternatively in seconds - depend on level - interval
-    // change later 
+    // when starships appear alternatively in seconds - depend on level (multiply)
     this.durationStarship = 3;
-    // number of starships appear at a time
+    // maximum number of starships appear at a time
     this.maxStarshipsApprear = 4;
-    // the SetInterval
+    // when planets appear alternatively in seconds - depend on level (multiply)
+    this.durationPlanets = 5.5;
+    // maximum number of planets appear at a time
+    this.maxPlanetsAppear = 2;
+    // the SetInterval --> this will be useful when bigges boss appear
     this.interval;
+    this.intervalPlanetGen;
     this.starshipGen();
+    this.planetGen();
     this.difficultyLevel = 1;
   }
 
@@ -33,11 +39,16 @@ class Game {
     this.backgroundImage = loadImage('assets/background/space1.png');
     this.starshipImg = loadImage('assets/spaceships/starship.png');
     this.imageDestroyer1 = loadImage('assets/spaceships/destroyer1.png');
-    this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
+    // this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
-    this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
+    // this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
     this.starshipBullet = loadImage('assets/lasers/laserRed.png');
-    this.explosionImg = loadImage('assets/spaceships/explosionImg.png')
+    this.explosionImg = loadImage('assets/spaceships/explosionImg.png');
+    this.planetImages = [
+      loadImage('assets/objects/earth.png'),
+      loadImage('assets/objects/jupiter.png'),
+      loadImage('assets/objects/strainge.png')
+    ]
     this.start1 = loadImage('assets/startImg/travel.gif');
     
     // reduce size of this gif
@@ -66,6 +77,7 @@ class Game {
       }
     } else {
       this.drawStarship();
+      this.drawPlanet();
       this.destroyer.draw();
       this.destroyer.multipleFires()
 
@@ -92,6 +104,33 @@ class Game {
         // too heavy task to load when using explosion effects here
         starship.multipleFires(this.destroyer);
         return true;
+      })
+
+      this.planets = this.planets.filter(planet => {
+        if (planet.getShot(this.destroyer)) {
+          image(this.explosionImg, planet.x+planet.sizeX/2, planet.y+planet.sizeY/2, planet.sizeX/2, planet.sizeY/2);
+          planet.shots++;
+          this.explosionSound1.play();
+          if (planet.shots === 3) {
+            this.destroyer.scores+=3;
+            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+            // big sound here
+            return false;
+          }
+        }
+        if (planet.getHit(this.destroyer)) {
+          image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+          // big sound here
+          this.shieldDownSound.play();
+          return false;
+        }
+
+        if (planet.y > height + planet.sizeY) {
+          this.destroyer.shield -=5;
+          this.shieldDownSound.play();
+          return false;
+        }
+        return true
       })
 
       this.shieldStatus(this.destroyer);
@@ -173,7 +212,7 @@ class Game {
   starshipGen() {
     this.interval = setInterval(() => {
       if (this.start) {
-        let n = Math.floor(Math.random() * this.maxStarshipsApprear) + 1;
+        let n = Math.floor(Math.random() * (this.maxStarshipsApprear + 1));
         let noStarships = 0;
         while(noStarships < n) {
           let starship = new Starship(this.starshipImg, this.difficultyLevel, this.starshipBullet);
@@ -199,6 +238,29 @@ class Game {
       })
     }
   }
+
+  planetGen() {
+    this.intervalPlanetGen = setInterval(() => {
+      if (this.start) {
+        let n = Math.floor(Math.random() * (this.maxPlanetsAppear + 1));
+        let noPlanets = 0;
+        while(noPlanets < n) {
+          let img = this.planetImages[Math.floor(Math.random() * this.planetImages.length)];
+          this.planets.push(new Planet(img, this.difficultyLevel));
+          noPlanets++;
+        }
+      }
+    }, this.durationPlanets*1000)
+  }
+
+  drawPlanet() {
+    if (this.planets.length) {
+      this.planets.forEach(planet => {
+        planet.draw();
+      })
+    }
+  }
+
 
   shieldStatus(destroyer) {
     image(this.shield, 10, 10, 50, 50);
