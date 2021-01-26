@@ -8,6 +8,7 @@ function setup() {
 }
 
 function preload() {
+    soundFormats('mp3', 'ogg');
     game.preload();
 }
 

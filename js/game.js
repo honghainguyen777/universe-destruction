@@ -9,6 +9,7 @@ class Game {
     this.imageBullet2;
     this.start = false;
     this.end = false;
+    this.won = false;
     // if 2 players -> allow three lives for both of them
     this.lives = 1;
   }
@@ -42,8 +43,12 @@ class Game {
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
     this.start1 = loadImage('assets/startImg/travel.gif');
+    // reduce size of this gif
     this.youLose = loadImage('assets/endImgs/youLose.gif');
     this.youLoseBgr = loadImage('assets/endImgs/youLostBgr.gif');
+    
+    this.shootingSound = loadSound('assets/musics/shootingSound.ogg');
+    this.backgroundSound = loadSound('assets/musics/background.mp3')
   }
 
 
@@ -55,7 +60,6 @@ class Game {
         this.endGame();
       }
     } else {
-      console.log("draw")
       this.drawStarship();
       this.destroyer.draw();
       this.destroyer.multipleFires()
@@ -80,8 +84,10 @@ class Game {
       this.levelUp(this.destroyer)
 
       if (this.destroyer.shield < 0) {
+        this.shootingSound.stop()
         this.end = true;
         this.start = false;
+        
       }
     }
   }
@@ -135,9 +141,6 @@ class Game {
     text('Weed, The Destroyer', width/4+10, height-100);
     textSize(26);
     text("Don't feel bad when wiping all civilizations ", width/6, height-50);
-    // Mission incomplete
-    // Your scores
-    // Highest score
   }
 
   // universe code --> destroy to end the game
@@ -238,9 +241,17 @@ class Game {
   keyPressed() {
     if (keyCode === 13) {
       this.start = true;
+      this.backgroundSound.setVolume(0.3)
+      this.backgroundSound.loop();
     }
+
+    if (keyCode === 77 && this.end) {
+      window.location.reload();
+    }
+
     if (keyCode === 32) {
         this.destroyer.fireBullet();
+        this.shootingSound.play();
     }
     if (keyCode === 38) {
       this.destroyer.moveUp();
