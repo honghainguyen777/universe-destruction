@@ -12,14 +12,9 @@ function preload() {
 }
 
 function draw() {
-    // if (!game.start) {
-
-    // }
-
     clear();
     background(game.backgroundImage);
     game.draw();
-    
 }
 
 function keyPressed() {

@@ -7,7 +7,7 @@ class Game {
     this.imageDestroyer2;
     this.imageBullet1;
     this.imageBullet2;
-    // this.start = false;
+    this.start = false;
     // if 2 players -> allow three lives for both of them
     this.lives = 1;
   }
@@ -44,58 +44,88 @@ class Game {
     this.imageDestroyer2 = loadImage('assets/spaceships/destroyer2.png');
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
+    this.start1 = loadImage('assets/startImg/travel.gif')
   }
 
 
   draw() {
-    // this.drawGrid();
-    this.drawStarship();
+    if (!this.start) {
+      this.preStart();
+    } else {
+      this.drawStarship();
 
-    this.destroyer.draw();
-    this.destroyer.multipleFires()
+      this.destroyer.draw();
+      this.destroyer.multipleFires()
 
-    this.starships = this.starships.filter(starship => {
-      if (starship.getShot(this.destroyer)) {
-        return false;
+      this.starships = this.starships.filter(starship => {
+        if (starship.getShot(this.destroyer)) {
+          return false;
+        }
+        // starship passed -> your mother ship is going to be destroyed, your shield down
+        if (starship.y > height + starship.sizeY) {
+          this.destroyer.shield -= 2;
+          return false;
+        }
+
+        if (starship.getHit(this.destroyer)) {
+          return false;
+        }
+        return true;
+      })
+
+      this.shieldStatus(this.destroyer);
+      this.levelUp(this.destroyer)
+
+      if (this.destroyer.isLost()) {
+        // performing stop here -> loose
       }
-      // starship passed -> your mother ship is going to be destroyed, your shield down
-      if (starship.y > height + starship.sizeY) {
-        this.destroyer.shield -= 2;
-        return false;
-      }
-
-      if (starship.getHit(this.destroyer)) {
-        return false;
-      }
-      return true;
-    })
-
-    this.shieldStatus(this.destroyer);
-    this.levelUp(this.destroyer)
-
-    if (this.destroyer.isLost()) {
-      // performing stop here -> loose
     }
+  }
+
+  // before starting the game
+  preStart() {
+        background(this.start1);
+        // background(game.backgroundImage);
+        image(this.imageDestroyer1, width/2-112, height-300, 224, 150);
+        textStyle(BOLD);
+        textFont('Potta One');
+        textSize(60);
+        text('Universe Destruction', 70, 100);
+
+        
+        textSize(42);
+        fill("#00af91")
+        text('PRESS ENTER KEY TO START', 80, height/1.4);
+
+        textFont('Orbitron')
+        textSize(35);
+        fill("white");
+        text('Weed, The Destroyer', width/4+10, height-100);
+        textSize(26);
+        text("Don't feel bad when wiping all civilizations ", width/6, height-50);
   }
 
   // starships generator -> can use to generate planet and stars
   starshipGen() {
     this.interval = setInterval(() => {
-      let n = Math.floor(Math.random() * this.maxStarshipsApprear) + 1;
-      let noStarships = 0;
-      while(noStarships < n) {
-        let starship = new Starship(this.starshipImg, this.difficultyLevel);
-        if (!this.objectTrack.includes(starship.x)) {
-          this.starships.push(starship);
-          this.objectTrack.push(starship.x);
-          noStarships++;
+      if (this.start) {
+        let n = Math.floor(Math.random() * this.maxStarshipsApprear) + 1;
+        let noStarships = 0;
+        while(noStarships < n) {
+          let starship = new Starship(this.starshipImg, this.difficultyLevel);
+          if (!this.objectTrack.includes(starship.x)) {
+            this.starships.push(starship);
+            this.objectTrack.push(starship.x);
+            noStarships++;
+          }
         }
-      }
-      // for (let i=0; i<n; i++) {
+        // for (let i=0; i<n; i++) {
 
-      //   this.starships.push(new Starship(this.starshipImg));
-      // }
-      this.objectTrack = []
+        //   this.starships.push(new Starship(this.starshipImg));
+        // }
+        this.objectTrack = []
+      }
+      
     }, this.durationStarship * 1000);
   }
 
@@ -165,6 +195,9 @@ class Game {
   }
 
   keyPressed() {
+    if (keyCode === 13) {
+      this.start = true;
+    }
     if (keyCode === 32) {
         this.destroyer.fireBullet();
     }
