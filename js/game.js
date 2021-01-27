@@ -229,6 +229,7 @@ class Game {
 
   planetGen() {
     this.intervalPlanetGen = setInterval(() => {
+      console.log("start generating planets")
       if (this.start) {
         let n = Math.floor(Math.random() * (this.maxPlanetsAppear + 1));
         let noPlanets = 0;
@@ -420,23 +421,27 @@ class Game {
   preStart() {
     background(this.start1);
     // background(game.backgroundImage);
-    image(this.imageDestroyer1, width/2-112, height-300, 224, 150);
+    // imageMode(CENTER);
+    image(this.imageDestroyer1, width/2-112, height-270, 224, 150);
+    // ImageMode(LEFT);
     textStyle(BOLD);
     textFont('Potta One');
-    textSize(60);
-    text('Universe Destruction', 70, 100);
+    textSize(54);
+    textAlign(CENTER);
+    text('Universe Destruction', 10, 100, width);
 
     
     textSize(42);
     fill("#00af91")
-    text('PRESS ENTER KEY TO START', 80, height/1.4);
+    text('PRESS ENTER KEY TO START', 10, height-350, width);
 
     textFont('Orbitron')
     textSize(35);
     fill("white");
-    text('Weed, The Destroyer', width/4+10, height-100);
+    text('Weed, The Destroyer', 0, height-100, width);
     textSize(26);
-    text("Don't feel bad when wiping all civilizations ", width/6, height-50);
+    text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
+    textAlign(LEFT)
   }
 
   endGame() {
@@ -444,11 +449,12 @@ class Game {
     background(this.youLoseBgr);
     textFont('Potta One');
     textSize(60);
-    text('YOU LOSE!', 240, 120);
+    textAlign(CENTER);
+    text('YOU LOSE!', 0, 50, width);
     
     textFont('Orbitron')
     textSize(45);
-    text(`Your scores: ${this.destroyer.scores}`, width/4+10, 250);
+    text(`Your scores: ${this.destroyer.scores}`, 0, 170, width);
 
     // Ranking list, later
 
@@ -456,15 +462,16 @@ class Game {
 
     textFont('Potta One');
     textSize(50);
-    text('PRESS M TO REVENGE', 110, height/2 + (width*0.562/2) + 100);
+    text('PRESS M TO REVENGE', 0, height/2 + (width*0.562/2) + 100, width);
 
 
     textFont('Orbitron')
     textSize(35);
     fill("white");
-    text('Weed, The Destroyer', width/4+10, height-100);
+    text('Weed, The Destroyer', 0, height-100, width);
     textSize(26);
-    text("Don't feel bad when wiping all civilizations ", width/6, height-50);
+    text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
+    textAlign(LEFT);
   }
 
   // universe code --> destroy to end the game
