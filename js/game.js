@@ -6,6 +6,8 @@ class Game {
     this.won = false;
     // if 2 players -> allow three lives for both of them
     this.lives = 1;
+    this.bossLevel = 2;
+    this.level = 1;
 
   }
 
@@ -15,6 +17,7 @@ class Game {
     // create a list of players later
 
     this.destroyer = new Destroyer(WIDTH/2-50, HEIGHT-100, this.imageDestroyer1, this.imageBullet1);
+    this.boss = new Boss(this.bossImg, 100, 5, this.bossLevel);
 
     this.starships = [];
     this.planets = [];
@@ -47,6 +50,7 @@ class Game {
     this.imageBullet1 = loadImage('assets/lasers/laserBlue.png'); 
     // this.imageBullet2 = loadImage('assets/lasers/laserGreen.png');
     this.starshipBullet = loadImage('assets/lasers/laserRed.png');
+    this.bossImg = loadImage('assets/objects/poop.gif');
     this.explosionImg = loadImage('assets/spaceships/explosionImg.png');
     this.planetImages = [
       loadImage('assets/objects/earth.png'),
@@ -85,104 +89,10 @@ class Game {
         this.endGame();
       }
     } else {
-      this.drawStarship();
-      this.drawPlanet();
-      // this.drawObj(this.stars)
-      this.drawStar()
-
       this.destroyer.draw();
-      this.destroyer.multipleFires()
-
-      this.starships = this.starships.filter(starship => {
-        if (starship.getShot(this.destroyer)) {
-          image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
-          this.explosionSound1.play();
-          // clearInterval(starship.fireGen);
-          return false;
-        }
-        // starship passed -> mother ship is going to be destroyed, the shield is down
-        if (starship.y > height + starship.sizeY) {
-          this.destroyer.shield -= 2;
-          this.shieldDownSound.play();
-          return false;
-        }
-
-        if (starship.getHit(this.destroyer)) {
-          image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
-          this.explosionSound1.play();
-          this.shieldDownSound.play();
-          return false;
-        }
-        // too heavy task to load when using explosion effects here
-        starship.multipleFires(this.destroyer);
-        return true;
-      })
-
-      this.planets = this.planets.filter(planet => {
-        if (planet.getShot(this.destroyer)) {
-          image(this.explosionImg, planet.x+planet.sizeX/2, planet.y+planet.sizeY/2, planet.sizeX/2, planet.sizeY/2);
-          planet.shots++;
-          this.explosionSound1.play();
-          if (planet.shots === 3) {
-            this.destroyer.scores+=3;
-            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
-            // big sound here
-            return false;
-          }
-        }
-        if (planet.getHit(this.destroyer)) {
-          image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
-          // big sound here
-          this.shieldDownSound.play();
-          return false;
-        }
-
-        if (planet.y > height + planet.sizeY) {
-          this.destroyer.shield -=5;
-          this.shieldDownSound.play();
-          return false;
-        }
-        return true
-      })
-
-      // if (this.stars.length) {
-      //   this.stars = this.eventObj(this.stars, 5, 120);
-      // }
-      // this.stars = this.eventObj(this.stars, 5, 120);
-      // this.eventObj(this.stars, 5, 120);
-
-      this.stars = this.stars.filter(obj => {
-        if (obj.getShot(this.destroyer)) {
-          image(this.explosionImg, obj.x+obj.sizeX/2, obj.y+obj.sizeY/2, obj.sizeX/2, obj.sizeY/2);
-          obj.shots++;
-          this.explosionSound1.play();
-          // console.log(`shots: ${obj.shots} --- max: ${obj.numberOfShot}`);
-          if (obj.shots === obj.numberOfShot) {
-            // console.log("True");
-            this.destroyer.scores+=10;
-            image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
-            // big sound here
-            return false;
-          }
-        }
-        if (obj.getHit(this.destroyer)) {
-          image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
-          // big sound here
-          this.shieldDownSound.play();
-          return false;
-        }
-  
-        if (obj.y > height + obj.sizeY) {
-          this.destroyer.shield -=8;
-          this.shieldDownSound.play();
-          return false;
-        }
-        return true
-      })
-
+      this.destroyer.multipleFires();
       this.shieldStatus(this.destroyer);
       this.levelUp(this.destroyer)
-
       if (this.destroyer.shield < 0) {
         this.backgroundSound.stop()
         this.gameoverSound.play();
@@ -190,8 +100,130 @@ class Game {
         this.start = false;
       }
 
-      // if level === ??? Boss appear -> all object array = [] -> generation end (removeInterval)
-      // boss can fire multiple fires with a fix duration
+      if (this.level < this.bossLevel) {
+        this.drawStarship();
+        this.drawPlanet();
+        // this.drawObj(this.stars)
+        this.drawStar()
+
+        this.starships = this.starships.filter(starship => {
+          if (starship.getShot(this.destroyer)) {
+            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+            this.explosionSound1.play();
+            // clearInterval(starship.fireGen);
+            return false;
+          }
+          // starship passed -> mother ship is going to be destroyed, the shield is down
+          if (starship.y > height + starship.sizeY) {
+            this.destroyer.shield -= 2;
+            this.shieldDownSound.play();
+            return false;
+          }
+
+          if (starship.getHit(this.destroyer)) {
+            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+            this.explosionSound1.play();
+            this.shieldDownSound.play();
+            return false;
+          }
+          // too heavy task to load when using explosion effects here
+          starship.multipleFires(this.destroyer);
+          return true;
+        })
+
+        this.planets = this.planets.filter(planet => {
+          if (planet.getShot(this.destroyer)) {
+            image(this.explosionImg, planet.x+planet.sizeX/2, planet.y+planet.sizeY/2, planet.sizeX/2, planet.sizeY/2);
+            planet.shots++;
+            this.explosionSound1.play();
+            if (planet.shots === 3) {
+              this.destroyer.scores+=3;
+              image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+              // big sound here
+              return false;
+            }
+          }
+          if (planet.getHit(this.destroyer)) {
+            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+            // big sound here
+            this.shieldDownSound.play();
+            return false;
+          }
+
+          if (planet.y > height + planet.sizeY) {
+            this.destroyer.shield -=5;
+            this.shieldDownSound.play();
+            return false;
+          }
+          return true
+        })
+
+        // if (this.stars.length) {
+        //   this.stars = this.eventObj(this.stars, 5, 120);
+        // }
+        // this.stars = this.eventObj(this.stars, 5, 120);
+        // this.eventObj(this.stars, 5, 120);
+
+        this.stars = this.stars.filter(obj => {
+          if (obj.getShot(this.destroyer)) {
+            image(this.explosionImg, obj.x+obj.sizeX/2, obj.y+obj.sizeY/2, obj.sizeX/2, obj.sizeY/2);
+            obj.shots++;
+            this.explosionSound1.play();
+            // console.log(`shots: ${obj.shots} --- max: ${obj.numberOfShot}`);
+            if (obj.shots === obj.numberOfShot) {
+              // console.log("True");
+              this.destroyer.scores+=10;
+              image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
+              // big sound here
+              return false;
+            }
+          }
+          if (obj.getHit(this.destroyer)) {
+            image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
+            // big sound here
+            this.shieldDownSound.play();
+            return false;
+          }
+    
+          if (obj.y > height + obj.sizeY) {
+            this.destroyer.shield -=8;
+            this.shieldDownSound.play();
+            return false;
+          }
+          return true
+        })
+
+        // if level === ??? Boss appear -> all object array = [] -> generation end (removeInterval)
+        // boss can fire multiple fires with a fix duration
+      } else {
+        this.boss.draw();
+        clearInterval(this.interval);
+        clearInterval(this.intervalPlanetGen);
+        clearInterval(this.intervalObjGen);
+        if (this.starships.length) {
+          this.starships.forEach(starship => {
+            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+            this.explosionSound1.play();
+          })
+          this.starships = [];
+        }
+        if (this.planets.length) {
+          this.planets.forEach(planet => {
+            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+            // big sound here
+          })
+          this.planets = [];
+        }
+        if (this.stars.length) {
+          this.stars.forEach(star => {
+            image(this.explosionImg, star.x, star.y, star.sizeX+120, star.sizeY+120);
+            // big sound here
+          })
+          this.stars = [];
+        }
+
+
+      }
     }
   }
 
@@ -203,7 +235,7 @@ class Game {
         let n = Math.floor(Math.random() * (this.maxStarshipsApprear + 1));
         let noStarships = 0;
         while(noStarships < n) {
-          let starship = new Starship(this.starshipImg, this.difficultyLevel, this.starshipBullet);
+          let starship = new Starship(this.starshipImg, this.level, this.starshipBullet);
           if (!this.objectTrack.includes(starship.x)) {
             starship.firesGeneration();
             this.starships.push(starship);
@@ -229,13 +261,12 @@ class Game {
 
   planetGen() {
     this.intervalPlanetGen = setInterval(() => {
-      console.log("start generating planets")
       if (this.start) {
         let n = Math.floor(Math.random() * (this.maxPlanetsAppear + 1));
         let noPlanets = 0;
         while(noPlanets < n) {
           let img = this.planetImages[Math.floor(Math.random() * this.planetImages.length)];
-          this.planets.push(new Planet(img, this.difficultyLevel));
+          this.planets.push(new Planet(img, this.level));
           noPlanets++;
         }
       }
@@ -257,7 +288,7 @@ class Game {
         let noObj = 0;
         while(noObj < n) {
           let img = this.starImages[Math.floor(Math.random() * this.starImages.length)];
-          this.stars.push(new UniverseObject(img, this.difficultyLevel, 110, 110, 8));
+          this.stars.push(new UniverseObject(img, this.level, 110, 110, 8));
           noObj++;
         }
       }
@@ -280,7 +311,7 @@ class Game {
   //       let noObj = 0;
   //       while(noObj < n) {
   //         let img = images[Math.floor(Math.random() * images.length)];
-  //         objects.push(new UniverseObject(img, this.difficultyLevel, 110, 110, 5));
+  //         objects.push(new UniverseObject(img, this.level, 110, 110, 5));
   //         noObj++;
   //       }
   //     }
@@ -360,8 +391,8 @@ class Game {
   }
 
   levelUp(destroyer) {
-    let lvlScores = BASED_SCORE * 2** this.difficultyLevel;
-    text(`LV ${this.difficultyLevel}:`, 240, 41);
+    let lvlScores = BASED_SCORE * 2** this.level;
+    text(`LV ${this.level}:`, 240, 41);
 
     fill(255, 255, 255, 10);
     rect(325, 15, 120, 33);
@@ -383,7 +414,7 @@ class Game {
     }
 
     if (destroyer.scores > lvlScores) {
-      this.difficultyLevel++;
+      this.level++;
     }
   }
 
@@ -431,7 +462,7 @@ class Game {
     text('Universe Destruction', 10, 100, width);
 
     
-    textSize(42);
+    textSize(38);
     fill("#00af91")
     text('PRESS ENTER KEY TO START', 10, height-350, width);
 
