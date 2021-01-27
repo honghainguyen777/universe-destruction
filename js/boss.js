@@ -1,10 +1,11 @@
 class Boss {
-    constructor(image, noGetShotsBoss, bulletsPerTime, bossLevel) {
+    constructor(image, imageBullet, noGetShotsBoss, bulletsPerTime, bossLevel) {
         this.sizeX = width/3;
         this.sizeY = width/3;
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = -width/3;
         this.image = image;
+        this.imageBullet = imageBullet;
         // this.difficultyLevel = difficultyLevel;
         this.noGetShotsBoss = noGetShotsBoss;
         this.shots = 0;
@@ -15,6 +16,7 @@ class Boss {
         this.bossLevel = bossLevel;
         // 0 right, 1 left
         this.direction = 0;
+        this.start = false;
     }
     draw() {
         this.y = constrain(this.y, -width/3, 100)
@@ -33,16 +35,24 @@ class Boss {
     }
 
     fireBullet() {
-        let bullet = {x: this.posX + this.sizeX/2, y: this.posY + this.sizeY}
+        let rand = Math.floor(Math.random() * this.sizeX)
+        let bullet = {x: this.x + rand, y: this.y + this.sizeY}
+        console.log(bullet);
         this.bullets.push(bullet);
     }
 
     firesGeneration() {
         this.bulletGen = setInterval(() => {
-            let n = 0;
-            while(n < this.bulletsPerTime) {
-                this.fireBullet();
-                n++;
+            console.log("Bullet generator started! but bullet generated = " + this.start);
+            // start the generator when game started, but only when game start, bullets generated
+            // when pressed ENTER
+            if (this.start) {
+                let n = 0;
+                while(n < this.bulletsPerTime) {
+                    console.log("bullet generated")
+                    this.fireBullet();
+                    n++;
+                }
             }
         }, 6000/this.bossLevel)
     }
