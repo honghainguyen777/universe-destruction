@@ -69,7 +69,7 @@ class Starship {
         let hit = false;
         destroyerInfo.bullets.forEach((bullet, index) => {
             if (dist(starshipX, starshipY, bullet.x, bullet.y) <= this.sizeY/2) {
-                game.destroyer.scores += 1;
+                destroyerInfo.scores += 1;
                 destroyerInfo.bullets.splice(index, 1);
                 hit = true;
             }
@@ -85,7 +85,7 @@ class Starship {
         let destroyerY = destroyerInfo.posY;
         let distance = dist(starshipX, starshipY, destroyerX, destroyerY);
         if ((distance <= this.sizeY/2 + destroyerInfo.sizeY && destroyerInfo.posY < this.y) || (distance <= this.sizeY/2)) {
-            game.destroyer.shield -= 10;
+            destroyerInfo.shield -= 10;
             return true;
         } else {
             return false;

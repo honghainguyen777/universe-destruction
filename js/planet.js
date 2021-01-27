@@ -38,7 +38,6 @@ class Planet {
         let hit = false;
         destroyerInfo.bullets.forEach((bullet, index) => {
             if (dist(planetX, planetY, bullet.x, bullet.y) <= this.sizeY/2) {
-                // game.destroyer.scores += 3;
                 destroyerInfo.bullets.splice(index, 1);
                 hit = true;
             }
@@ -54,7 +53,7 @@ class Planet {
         let destroyerY = destroyerInfo.posY;
         let distance = dist(planetX, planetY, destroyerX, destroyerY);
         if ((distance <= this.sizeY/2 + destroyerInfo.sizeY && destroyerInfo.posY < this.y) || (distance <= this.sizeY/2)) {
-            game.destroyer.shield -= 20;
+            destroyerInfo.shield -= 20;
             return true;
         } else {
             return false;

@@ -1,12 +1,12 @@
 class Boss {
-    constructor(image, numberOfShot, bulletsPerTime, bossLevel) {
+    constructor(image, noGetShotsBoss, bulletsPerTime, bossLevel) {
         this.sizeX = width/3;
         this.sizeY = width/3;
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = -width/3;
         this.image = image;
         // this.difficultyLevel = difficultyLevel;
-        this.numberOfShot = numberOfShot;
+        this.noGetShotsBoss = noGetShotsBoss;
         this.shots = 0;
         this.bullets = [];
         this.bulletSizeX = 10;
@@ -75,7 +75,8 @@ class Boss {
         let hit = false;
         destroyerInfo.bullets.forEach((bullet, index) => {
             if (dist(bossX, bossY, bullet.x, bullet.y) <= this.sizeY/2) {
-                // game.destroyer.scores += 3;
+                this.shots += 1;
+                destroyerInfo.scores += 1;
                 destroyerInfo.bullets.splice(index, 1);
                 hit = true;
             }
@@ -91,7 +92,7 @@ class Boss {
         let destroyerY = destroyerInfo.posY;
         let distance = dist(bossX, bossY, destroyerX, destroyerY);
         if ((distance <= this.sizeY/2 + destroyerInfo.sizeY && destroyerInfo.posY < this.y) || (distance <= this.sizeY/2)) {
-            game.destroyer.shield -= 20;
+            destroyerInfo.shield -= 100;
             return true;
         } else {
             return false;

@@ -8,6 +8,7 @@ class Game {
     this.lives = 1;
     this.bossLevel = 2;
     this.level = 1;
+    this.noGetShotsBoss = 20; 
 
   }
 
@@ -17,7 +18,7 @@ class Game {
     // create a list of players later
 
     this.destroyer = new Destroyer(WIDTH/2-50, HEIGHT-100, this.imageDestroyer1, this.imageBullet1);
-    this.boss = new Boss(this.bossImg, 100, 5, this.bossLevel);
+    this.boss = new Boss(this.bossImg, this.noGetShotsBoss, 5, this.bossLevel);
 
     this.starships = [];
     this.planets = [];
@@ -222,7 +223,23 @@ class Game {
           this.stars = [];
         }
 
+        if (this.boss.getShot(this.destroyer)) {
+          image(this.explosionImg, this.boss.x, this.boss.y, this.boss.sizeX+5, this.boss.sizeY+5);
+          this.explosionSound1.play();
+          console.log(`shots ${this.boss.shots}  - max: ${this.boss.noGetShotsBoss}`)
+          if (this.boss.shots > this.boss.noGetShotsBoss) {
+            this.end = true;
+            this.start = false;
+            this.end = true;
+          }
+        }
 
+        if (this.boss.getHit(this.destroyer)) {
+          image(this.explosionImg, this.boss.x, this.boss.y, this.boss.sizeX+5, this.boss.sizeY+5);
+          this.explosionSound1.play();
+          this.shieldDownSound.play();
+        }
+        // this.boss.multipleFires(this.destroyer);
       }
     }
   }
