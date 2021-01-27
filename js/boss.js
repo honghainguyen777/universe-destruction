@@ -37,19 +37,16 @@ class Boss {
     fireBullet() {
         let rand = Math.floor(Math.random() * this.sizeX)
         let bullet = {x: this.x + rand, y: this.y + this.sizeY}
-        console.log(bullet);
         this.bullets.push(bullet);
     }
 
     firesGeneration() {
         this.bulletGen = setInterval(() => {
-            console.log("Bullet generator started! but bullet generated = " + this.start);
             // start the generator when game started, but only when game start, bullets generated
             // when pressed ENTER
             if (this.start) {
                 let n = 0;
                 while(n < this.bulletsPerTime) {
-                    console.log("bullet generated")
                     this.fireBullet();
                     n++;
                 }

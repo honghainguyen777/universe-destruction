@@ -5,7 +5,10 @@ class Game {
     this.win = false;
     this.bossLevel = BOSS_LEVEL;
     this.level = 1;
-    this.noGetShotsBoss = BOSS_GET_SHOT; 
+    this.noGetShotsBoss = BOSS_GET_SHOT;
+    this.buttonE;
+    this.buttonM;
+    this.buttonH;
 
   }
 
@@ -24,6 +27,7 @@ class Game {
     this.durationStars = STAR_DURATION;
     this.maxStarsAppear = STAR_MAX;
     this.difficulty = DIFFICULTY;
+    this.setupDifficulty();
   }
 
   preload() {
@@ -443,6 +447,9 @@ class Game {
   keyPressed() {
     if (keyCode === 13) {
       this.start = true;
+      this.buttonE.remove();
+      this.buttonM.remove();
+      this.buttonH.remove()
       this.starshipGen();
       this.planetGen();
       this.starGen();
@@ -479,12 +486,16 @@ class Game {
     textFont('Potta One');
     textSize(54);
     textAlign(CENTER);
-    text('Universe Destruction', 10, 100, width);
+    text('Universe Destruction', 10, 50, width);
 
     
     textSize(38);
     fill("#00af91")
-    text('PRESS ENTER KEY TO START', 10, height-350, width);
+    text('PRESS ENTER KEY TO START', 10, height/5, width);
+
+    textSize(32);
+    fill("green")
+    text('DIFFICULTY', 10, height/1.4-40, width);
 
     textFont('Orbitron')
     textSize(35);
@@ -558,7 +569,42 @@ class Game {
     textAlign(LEFT);
   }
 
-  instruction() {
+  setupDifficulty() {
+    this.buttonE = createButton('MEDIUM');
+    this.buttonE.parent("canvas");
+    // this.buttonE.style('font-family', 'Orbitron')
+    this.buttonE.style('font-size', '25px')
+    this.buttonE.style('background-color', 'green');
+    this.buttonE.style('width', '120px');
+    this.buttonE.style('position', 'relative');
+    this.buttonE.position(width/2-200, height/1.4);
+    this.buttonE.mousePressed(this.difficulty = 2);
 
+    this.buttonM = createButton('MEDIUM');
+    this.buttonM.parent("canvas");
+    this.buttonM.style('font-size', '25px')
+    this.buttonM.style('background-color', 'green');
+    this.buttonM.style('width', '120px');
+    this.buttonM.style('position', 'relative');
+    this.buttonM.position(width/2-60, height/1.4);
+    this.buttonM.mousePressed(this.difficulty = 2);
+
+    this.buttonH = createButton('HARD');
+    this.buttonH.parent("canvas");
+    this.buttonH.style('font-size', '25px')
+    this.buttonH.style('background-color', 'green');
+    this.buttonH.style('width', '120px');
+    this.buttonH.style('position', 'relative');
+    this.buttonH.position(width/2+80, height/1.4);
+    this.buttonH.mousePressed(this.difficulty = 3);
+  }
+
+  // buttonChange(button, difficulty) {
+  //   button.style('background-color', 'blue');
+  //   this.difficulty = difficulty;
+  // }
+
+  instruction() {
+    
   }
 }
