@@ -23,6 +23,8 @@ function keyPressed() {
     game.keyPressed();
 }
 
-// make sheld reduce if collision 10% if get 1 shot, 20% in hit to starship
-// if number of of starship passed too many --> loose the game
 // User can choose destroyer 
+// change the difficulty and boss level
+// Boss said in interval of time: You die! This en
+// destroyer: So, you are the one who control this dirty universe?
+// tao se xoa bo toan bo vu tru nay

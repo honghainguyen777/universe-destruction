@@ -1,22 +1,15 @@
 class Game {
-
   constructor() {
     this.start = false;
     this.end = false;
-    this.won = false;
-    // if 2 players -> allow three lives for both of them
-    // this.lives = 1;
-    this.bossLevel = 6;
+    this.win = false;
+    this.bossLevel = BOSS_LEVEL;
     this.level = 1;
-    this.noGetShotsBoss = 100; 
+    this.noGetShotsBoss = BOSS_GET_SHOT; 
 
   }
 
   setup() {
-    // use DOM to get the number of players - 1 or 2
-    
-    // create a list of players later
-
     this.destroyer = new Destroyer(WIDTH/2-50, HEIGHT-100, this.imageDestroyer1, this.imageBullet1);
     this.boss = new Boss(this.bossImg, this.starshipBullet, this.noGetShotsBoss, 5, this.bossLevel);
 
@@ -24,22 +17,13 @@ class Game {
     this.planets = [];
     this.stars = [];
     this.objectTrack = [];
-    // when starships appear alternatively in seconds - depend on level (multiply)
-    this.durationStarship = 3;
-    // maximum number of starships appear at a time
-    this.maxStarshipsApprear = 4;
-    // when planets appear alternatively in seconds - depend on level (multiply)
-    this.durationPlanets = 5;
-    // maximum number of planets appear at a time
-    this.maxPlanetsAppear = 2;
-     // when stars appear alternatively in seconds - depend on level (multiply)
-     this.durationStars = 8; //6.5
-     // maximum number of planets appear at a time
-     this.maxStarsAppear = 1; // 1
-    // the SetInterval --> this will be useful when bigges boss appear
-    this.difficultyLevel = 1;
-    this.interval;
-    this.intervalPlanetGen;
+    this.durationStarship = STARSHIP_DURATION;
+    this.maxStarshipsApprear = STARSHIP_MAX;
+    this.durationPlanets = PLANET_DURATION;
+    this.maxPlanetsAppear = PLANET_MAX;
+    this.durationStars = STAR_DURATION;
+    this.maxStarsAppear = STAR_MAX;
+    this.difficulty = DIFFICULTY;
   }
 
   preload() {
@@ -64,21 +48,22 @@ class Game {
       loadImage('assets/objects/orangeStar.png')
     ];
     this.start1 = loadImage('assets/startImg/travel.gif');
-    
-    // reduce size of this gif
     this.youLose = loadImage('assets/endImgs/youLose.gif');
     this.youLoseBgr = loadImage('assets/endImgs/youLostBgr.gif');
-    
+    this.youWon = loadImage('assets/endImgs/youWon.gif');
     this.shootingSound = loadSound('assets/musics/shootingSound.ogg');
     this.backgroundSound = loadSound('assets/musics/background.mp3');
+    this.victory = loadSound('assets/musics/victory.mp3');
     this.gameoverSound = loadSound('assets/musics/gameover.mp3');
-    this.explosionSound1 = loadSound('assets/musics/explosion1.mp3')
-    //shield
+    this.explosionSound1 = loadSound('assets/musics/explosion1.mp3');
+    this.explosionSound2 = loadSound('assets/musics/explosion2.mp3');
     this.shieldDownSound = loadSound('assets/musics/shieldDown.ogg');
     this.shieldUpSound = loadSound('assets/musics/shieldUp.ogg');
     this.explosionSound1.setVolume(0.2);
-    this.gameoverSound.setVolume(0.5)
+    this.gameoverSound.setVolume(0.5);
+    this.victory.setVolume(0.5);
     this.backgroundSound.setVolume(0.3)
+    this.explosionSound2.setVolume(0.35)
   }
 
 
@@ -87,7 +72,11 @@ class Game {
       if (!this.end) {
         this.preStart();
       } else {
-        this.endGame();
+        if (this.win) {
+          this.winGame();
+        } else {
+          this.endGame();
+        }
       }
     } else {
       this.destroyer.draw();
@@ -140,13 +129,13 @@ class Game {
             if (planet.shots === 3) {
               this.destroyer.scores+=3;
               image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
-              // big sound here
+              this.explosionSound2.play();
               return false;
             }
           }
           if (planet.getHit(this.destroyer)) {
             image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
-            // big sound here
+            this.explosionSound2.play();
             this.shieldDownSound.play();
             return false;
           }
@@ -170,18 +159,16 @@ class Game {
             image(this.explosionImg, obj.x+obj.sizeX/2, obj.y+obj.sizeY/2, obj.sizeX/2, obj.sizeY/2);
             obj.shots++;
             this.explosionSound1.play();
-            // console.log(`shots: ${obj.shots} --- max: ${obj.numberOfShot}`);
             if (obj.shots === obj.numberOfShot) {
-              // console.log("True");
               this.destroyer.scores+=10;
               image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
-              // big sound here
+              this.explosionSound2.play();
               return false;
             }
           }
           if (obj.getHit(this.destroyer)) {
             image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
-            // big sound here
+            this.explosionSound2.play();
             this.shieldDownSound.play();
             return false;
           }
@@ -193,9 +180,6 @@ class Game {
           }
           return true
         })
-
-        // if level === ??? Boss appear -> all object array = [] -> generation end (removeInterval)
-        // boss can fire multiple fires with a fix duration
       } else {
         // boss appear, start bullet generator
         this.boss.start = true;
@@ -213,14 +197,14 @@ class Game {
         if (this.planets.length) {
           this.planets.forEach(planet => {
             image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
-            // big sound here
+            this.explosionSound2.play();
           })
           this.planets = [];
         }
         if (this.stars.length) {
           this.stars.forEach(star => {
             image(this.explosionImg, star.x, star.y, star.sizeX+120, star.sizeY+120);
-            // big sound here
+            this.explosionSound2.play();
           })
           this.stars = [];
         }
@@ -230,9 +214,10 @@ class Game {
           this.explosionSound1.play();
           if (this.boss.shots > this.boss.noGetShotsBoss) {
             image(this.explosionImg, 50, 50, width-100, width-100);
+            this.victory.play();
             this.end = true;
             this.start = false;
-            this.end = true;
+            this.win = true;
           }
         }
 
@@ -255,7 +240,7 @@ class Game {
         let n = Math.floor(Math.random() * (this.maxStarshipsApprear + 1));
         let noStarships = 0;
         while(noStarships < n) {
-          let starship = new Starship(this.starshipImg, this.level, this.starshipBullet);
+          let starship = new Starship(this.starshipImg, this.level*this.difficulty, this.starshipBullet);
           if (!this.objectTrack.includes(starship.x)) {
             starship.firesGeneration();
             this.starships.push(starship);
@@ -286,7 +271,7 @@ class Game {
         let noPlanets = 0;
         while(noPlanets < n) {
           let img = this.planetImages[Math.floor(Math.random() * this.planetImages.length)];
-          this.planets.push(new Planet(img, this.level));
+          this.planets.push(new Planet(img, this.level*this.difficulty));
           noPlanets++;
         }
       }
@@ -308,7 +293,7 @@ class Game {
         let noObj = 0;
         while(noObj < n) {
           let img = this.starImages[Math.floor(Math.random() * this.starImages.length)];
-          this.stars.push(new UniverseObject(img, this.level, 110, 110, 8));
+          this.stars.push(new UniverseObject(img, this.level*this.difficulty, 110, 110, 8));
           noObj++;
         }
       }
@@ -411,7 +396,7 @@ class Game {
   }
 
   levelUp(destroyer) {
-    let lvlScores = BASED_SCORE * 2** this.level;
+    let lvlScores = BASED_SCORE * 2** this.level*this.difficulty;
     text(`LV ${this.level}:`, 240, 41);
 
     fill(255, 255, 255, 10);
@@ -489,10 +474,7 @@ class Game {
   // before starting the game
   preStart() {
     background(this.start1);
-    // background(game.backgroundImage);
-    // imageMode(CENTER);
     image(this.imageDestroyer1, width/2-112, height-270, 224, 150);
-    // ImageMode(LEFT);
     textStyle(BOLD);
     textFont('Potta One');
     textSize(54);
@@ -546,7 +528,34 @@ class Game {
   // universe code --> destroy to end the game
   // specify which level to appear universe code
   winGame() {
+    background(this.youLoseBgr);
+    textFont('Potta One');
+    textSize(60);
+    textAlign(CENTER);
+    text('Congraturation!', 0, 20, width);
+    textSize(35);
+    text('You have destroyed the entire universe!', 0, 100, width);
+    
+    textFont('Orbitron')
+    textSize(45);
+    text(`Your scores: ${this.destroyer.scores}`, 0, height/2-(width*0.562/2)-60, width);
 
+    // Ranking list, later
+
+    image(this.youWon, 0, height/2-(width*0.562/2), width, width*0.562);
+
+    textFont('Potta One');
+    textSize(50);
+    text('PRESS M TO REPLAY', 0, height/2 + (width*0.562/2) + 100, width);
+
+
+    textFont('Orbitron')
+    textSize(35);
+    fill("white");
+    text('Weed, The Destroyer', 0, height-100, width);
+    textSize(26);
+    text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
+    textAlign(LEFT);
   }
 
   instruction() {
