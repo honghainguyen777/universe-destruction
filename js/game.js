@@ -229,7 +229,6 @@ class Game {
 
   planetGen() {
     this.intervalPlanetGen = setInterval(() => {
-      console.log("start generating planets")
       if (this.start) {
         let n = Math.floor(Math.random() * (this.maxPlanetsAppear + 1));
         let noPlanets = 0;
@@ -252,7 +251,6 @@ class Game {
 
   starGen() {
     this.intervalObjGen = setInterval(() => {
-      console.log("start generating stars")
       if (this.start) {
         let n = Math.floor(Math.random() * (this.maxStarsAppear + 1));
         let noObj = 0;
