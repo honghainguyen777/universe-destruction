@@ -27,6 +27,7 @@ class Game {
     this.durationStars = STAR_DURATION;
     this.maxStarsAppear = STAR_MAX;
     this.difficulty = DIFFICULTY;
+    this.soundOn = true;
     this.setupDifficulty();
   }
 
@@ -52,6 +53,7 @@ class Game {
       loadImage('assets/objects/orangeStar.png')
     ];
     this.start1 = loadImage('assets/startImg/travel.gif');
+    this.instr = loadImage('assets/instruction/instruct.png')
     this.youLose = loadImage('assets/endImgs/youLose.gif');
     this.youLoseBgr = loadImage('assets/endImgs/youLostBgr.gif');
     this.youWon = loadImage('assets/endImgs/youWon.gif');
@@ -72,9 +74,9 @@ class Game {
 
 
   draw() {
+    this.soundControl();
     if (!this.start) {
       if (!this.end) {
-        console.log(this.difficulty);
         this.preStart();
       } else {
         if (this.win) {
@@ -483,7 +485,7 @@ class Game {
   // before starting the game
   preStart() {
     background(this.start1);
-    image(this.imageDestroyer1, width/2-(224*RATIO)/2, height-270*RATIO, 224*RATIO, 150*RATIO);
+    image(this.imageDestroyer1, width/3-(224*RATIO), height-270*RATIO, 224*RATIO, 150*RATIO);
     textStyle(BOLD);
     textFont('Potta One');
     textSize(54*RATIO);
@@ -494,6 +496,8 @@ class Game {
     textSize(38*RATIO);
     fill("#00af91")
     text('PRESS ENTER KEY TO START', 10, height*RATIO/5, width);
+
+    image(this.instr, width*2/3, height-270*RATIO, 184*RATIO, 150*RATIO)
 
     textSize(32*RATIO);
     fill("green")
@@ -611,12 +615,20 @@ class Game {
     this.buttonH.mousePressed(() => {this.difficulty = 3});
   }
 
-  // buttonChange(button, difficulty) {
-  //   button.style('background-color', 'blue');
-  //   this.difficulty = difficulty;
-  // }
-
-  instruction() {
-    
+  soundControl() {
+    let sound = createImg(this.soundOn ? "assets/volume/up.png" : "assets/volume/mute.png", 'SOUND');
+    sound.parent("canvas");
+    sound.size(40*RATIO, 40*RATIO)
+    sound.position(width-50*RATIO, 10*RATIO);
+    sound.mousePressed(() => {
+      if (this.soundOn) {
+        masterVolume(0);
+        this.soundOn = false;
+      }
+      else {
+        masterVolume(1);
+        this.soundOn = true;
+      }
+    });
   }
 }
