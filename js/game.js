@@ -74,6 +74,7 @@ class Game {
   draw() {
     if (!this.start) {
       if (!this.end) {
+        console.log(this.difficulty);
         this.preStart();
       } else {
         if (this.win) {
@@ -587,7 +588,7 @@ class Game {
     this.buttonE.style('width', `${120*RATIO}px`);
     this.buttonE.style('position', 'relative');
     this.buttonE.position(width/2-200*RATIO, (height/1.4));
-    this.buttonE.mousePressed(this.difficulty = 1);
+    this.buttonE.mousePressed(() => {this.difficulty = 1});
 
     this.buttonM = createButton('MEDIUM');
     this.buttonM.parent("canvas");
@@ -597,7 +598,7 @@ class Game {
     this.buttonM.style('width', `${120*RATIO}px`);
     this.buttonM.style('position', 'relative');
     this.buttonM.position(width/2-60*RATIO, height/1.4);
-    this.buttonM.mousePressed(this.difficulty = 2);
+    this.buttonM.mousePressed(() => {this.difficulty = 2});
 
     this.buttonH = createButton('HARD');
     this.buttonH.parent("canvas");
@@ -607,7 +608,7 @@ class Game {
     this.buttonH.style('width', `${120*RATIO}px`);
     this.buttonH.style('position', 'relative');
     this.buttonH.position(width/2+80*RATIO, height/1.4);
-    this.buttonH.mousePressed(this.difficulty = 3);
+    this.buttonH.mousePressed(() => {this.difficulty = 3});
   }
 
   // buttonChange(button, difficulty) {
