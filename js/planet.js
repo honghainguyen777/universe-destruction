@@ -1,11 +1,11 @@
 class Planet {
     constructor(image, difficultyLevel) {
-        this.sizeX = 80;
-        this.sizeY = 80;
+        this.sizeX = 80*width/834;
+        this.sizeY = 80*width/834;
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = 0;
         this.image = image;
-        this.difficultyLevel = difficultyLevel;
+        this.difficultyLevel = difficultyLevel*RATIO;
         this.numberOfShot = 3;
         this.step = 0;
         this.shots = 0;

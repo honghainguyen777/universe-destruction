@@ -2,9 +2,9 @@ const HEIGHT = window.innerHeight*0.95;
 const WIDTH = HEIGHT*0.75;
 // const HEIGHT = 1112;
 // const WIDTH = 834;
-const BASED_SCORE = 20; // default 50
-const BOSS_GET_SHOT = 50 // default 200
-const BOSS_LEVEL = 4 // default 6
+const BASED_SCORE = 20; // default 20
+const BOSS_GET_SHOT = 50 // default 50
+const BOSS_LEVEL = 4 // default 4
 
 // Enemy starship
   // when starships appear alternatively in seconds - depend on level (multiply)
@@ -25,5 +25,7 @@ const STAR_MAX = 1;
 
 // difficulty
 const DIFFICULTY = 1 // default 1
+// screen ratio
+const RATIO = WIDTH/834;
 // const WIDTH = 700;
 // const HEIGHT = 900;

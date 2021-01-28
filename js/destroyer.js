@@ -5,11 +5,11 @@ class Destroyer {
         this.image =imageDestroyer;
         this.imageUpgraded;
         this.imageBullet = imageBullet;
-        this.sizeX = 112;
-        this.sizeY = 75;
+        this.sizeX = 112*RATIO;
+        this.sizeY = 75*RATIO;
         this.bullets = [];
-        this.bulletSizeX = 7;
-        this.bulletSizeY = 30;
+        this.bulletSizeX = 7*RATIO;
+        this.bulletSizeY = 30*RATIO;
         this.scores = 0;
         this.shield = 100;
     }
@@ -20,19 +20,19 @@ class Destroyer {
         this.posY = constrain(this.posY, 0, height-this.sizeY)
         image(this.image, this.posX, this.posY, this.sizeX, this.sizeY);
         if (keyIsDown(LEFT_ARROW)) {
-            this.posX -= 5;
+            this.posX -= 5*RATIO;
         }
     
         if (keyIsDown(RIGHT_ARROW)) {
-            this.posX += 5;
+            this.posX += 5*RATIO;
         }
     
         if (keyIsDown(UP_ARROW)) {
-            this.posY -= 5;
+            this.posY -= 5*RATIO;
         }
     
         if (keyIsDown(DOWN_ARROW)) {
-            this.posY += 5;
+            this.posY += 5*RATIO;
         }
     }
 
@@ -46,7 +46,7 @@ class Destroyer {
             let clonedBullets = this.bullets.slice();
             clonedBullets.forEach((bullet, index) => {
                 image(this.imageBullet, bullet.x, bullet.y, this.bulletSizeX, this.bulletSizeY);
-                bullet.y -= 15;
+                bullet.y -= 15*RATIO;
                 if (bullet.y < 0) {
                     this.bullets.splice(index, 1);
                 }
@@ -62,15 +62,15 @@ class Destroyer {
     }
 
     moveUp() {
-        this.posY -= 10;
+        this.posY -= 10*RATIO;
     }
     moveDown() {
-        this.posY += 10;
+        this.posY += 10*RATIO;
     }
     moveLeft() {
-        this.posX -= 10;
+        this.posX -= 10*RATIO;
     }
     moveRight() {
-        this.posX += 10;
+        this.posX += 10*RATIO;
     }
 }

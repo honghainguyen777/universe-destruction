@@ -5,7 +5,7 @@ class UniverseObject {
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = 0;
         this.image = image;
-        this.difficultyLevel = difficultyLevel;
+        this.difficultyLevel = difficultyLevel*RATIO;
         this.numberOfShot = numberOfShot;
         this.step = 0;
         this.shots = 0;

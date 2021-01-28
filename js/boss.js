@@ -10,8 +10,8 @@ class Boss {
         this.noGetShotsBoss = noGetShotsBoss;
         this.shots = 0;
         this.bullets = [];
-        this.bulletSizeX = 10;
-        this.bulletSizeY = 50;
+        this.bulletSizeX = 10*RATIO;
+        this.bulletSizeY = 50*RATIO;
         this.bulletsPerTime = bulletsPerTime;
         this.bossLevel = bossLevel;
         // 0 right, 1 left
@@ -19,12 +19,12 @@ class Boss {
         this.start = false;
     }
     draw() {
-        this.y = constrain(this.y, -width/3, 100)
-        this.y+= 3;
+        this.y = constrain(this.y, -width/3, 100*RATIO)
+        this.y+= 3*RATIO;
         if (this.direction === 0) {
-            this.x+= this.bossLevel;
+            this.x+= this.bossLevel*RATIO;
         } else {
-            this.x-= this.bossLevel
+            this.x-= this.bossLevel*RATIO;
         }
         if (this.x <= 5) {
             this.direction = 0;
@@ -69,7 +69,7 @@ class Boss {
                     destroyerInfor.shield -= 5;
                     return false;
                 } else {
-                    bullet.y += 2*this.bossLevel;
+                    bullet.y += 2*this.bossLevel*RATIO;
                     return true;
                 }
             })

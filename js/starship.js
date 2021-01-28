@@ -1,15 +1,15 @@
 class Starship {
     constructor(image, difficultyLevel, imageBullet) {
-        this.sizeX = 60;
-        this.sizeY = 60;
+        this.sizeX = 60*RATIO;
+        this.sizeY = 60*RATIO;
         this.x = (Math.random() * (WIDTH - this.sizeX));
         this.y = 0;
         this.image = image;
         this.imageBullet = imageBullet;
-        this.difficultyLevel = difficultyLevel;
+        this.difficultyLevel = difficultyLevel*RATIO;
         this.bullets = [];
-        this.bulletSizeX = 6;
-        this.bulletSizeY = 20;
+        this.bulletSizeX = 6*RATIO;
+        this.bulletSizeY = 20*RATIO;
         // time interval each starship can fire
         this.interval = Math.floor(Math.random() * 3) + 1
         // each of them can only fire 3 times

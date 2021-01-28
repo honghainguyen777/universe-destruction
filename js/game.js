@@ -102,7 +102,7 @@ class Game {
 
         this.starships = this.starships.filter(starship => {
           if (starship.getShot(this.destroyer)) {
-            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5*RATIO, starship.sizeY+5*RATIO);
             this.explosionSound1.play();
             // clearInterval(starship.fireGen);
             return false;
@@ -115,7 +115,7 @@ class Game {
           }
 
           if (starship.getHit(this.destroyer)) {
-            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5*RATIO, starship.sizeY+5*RATIO);
             this.explosionSound1.play();
             this.shieldDownSound.play();
             return false;
@@ -132,13 +132,13 @@ class Game {
             this.explosionSound1.play();
             if (planet.shots === 3) {
               this.destroyer.scores+=3;
-              image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+              image(this.explosionImg, planet.x, planet.y, planet.sizeX+80*RATIO, planet.sizeY+80*RATIO);
               this.explosionSound2.play();
               return false;
             }
           }
           if (planet.getHit(this.destroyer)) {
-            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80*RATIO, planet.sizeY+80*RATIO);
             this.explosionSound2.play();
             this.shieldDownSound.play();
             return false;
@@ -165,13 +165,13 @@ class Game {
             this.explosionSound1.play();
             if (obj.shots === obj.numberOfShot) {
               this.destroyer.scores+=10;
-              image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
+              image(this.explosionImg, obj.x, obj.y, obj.sizeX+120*RATIO, obj.sizeY+120*RATIO);
               this.explosionSound2.play();
               return false;
             }
           }
           if (obj.getHit(this.destroyer)) {
-            image(this.explosionImg, obj.x, obj.y, obj.sizeX+120, obj.sizeY+120);
+            image(this.explosionImg, obj.x, obj.y, obj.sizeX+120*RATIO, obj.sizeY+120*RATIO);
             this.explosionSound2.play();
             this.shieldDownSound.play();
             return false;
@@ -193,21 +193,21 @@ class Game {
         clearInterval(this.intervalObjGen);
         if (this.starships.length) {
           this.starships.forEach(starship => {
-            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5, starship.sizeY+5);
+            image(this.explosionImg, starship.x, starship.y, starship.sizeX+5*RATIO, starship.sizeY+5*RATIO);
             this.explosionSound1.play();
           })
           this.starships = [];
         }
         if (this.planets.length) {
           this.planets.forEach(planet => {
-            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80, planet.sizeY+80);
+            image(this.explosionImg, planet.x, planet.y, planet.sizeX+80*RATIO, planet.sizeY+80*RATIO);
             this.explosionSound2.play();
           })
           this.planets = [];
         }
         if (this.stars.length) {
           this.stars.forEach(star => {
-            image(this.explosionImg, star.x, star.y, star.sizeX+120, star.sizeY+120);
+            image(this.explosionImg, star.x, star.y, star.sizeX+120*RATIO, star.sizeY+120*RATIO);
             this.explosionSound2.play();
           })
           this.stars = [];
@@ -217,7 +217,7 @@ class Game {
           image(this.explosionImg, this.boss.x, this.boss.y, this.boss.sizeX, this.boss.sizeY);
           this.explosionSound1.play();
           if (this.boss.shots > this.boss.noGetShotsBoss) {
-            image(this.explosionImg, 50, 50, width-100, width-100);
+            image(this.explosionImg, 50*RATIO, 50*RATIO, width-100*RATIO, width-100*RATIO);
             this.victory.play();
             this.end = true;
             this.start = false;
@@ -226,7 +226,7 @@ class Game {
         }
 
         if (this.boss.getHit(this.destroyer)) {
-          image(this.explosionImg, this.boss.x, this.boss.y, this.boss.sizeX+5, this.boss.sizeY+5);
+          image(this.explosionImg, this.boss.x, this.boss.y, this.boss.sizeX+5*RATIO, this.boss.sizeY+5*RATIO);
           this.explosionSound1.play();
           this.shieldDownSound.play();
         }
@@ -297,7 +297,7 @@ class Game {
         let noObj = 0;
         while(noObj < n) {
           let img = this.starImages[Math.floor(Math.random() * this.starImages.length)];
-          this.stars.push(new UniverseObject(img, this.level*this.difficulty, 110, 110, 8));
+          this.stars.push(new UniverseObject(img, this.level*this.difficulty, 110*RATIO, 110*RATIO, 8));
           noObj++;
         }
       }
@@ -372,10 +372,10 @@ class Game {
 
 
   shieldStatus(destroyer) {
-    image(this.shield, 10, 10, 50, 50);
+    image(this.shield, 10*RATIO, 10*RATIO, 50*RATIO, 50*RATIO);
     colorMode(RGB, 60);
     fill(255, 255, 255, 10);
-    rect(60, 15, 120, 33);
+    rect(60*RATIO, 15*RATIO, 120*RATIO, 33*RATIO);
 
     // turn red if shield < 40%
     if (destroyer.shield < 40) {
@@ -384,42 +384,43 @@ class Game {
       fill(0, 143, 17);
     }
 
-    rect(60, 15, destroyer.shield * 120/100, 33)
+    rect(60*RATIO, 15*RATIO, destroyer.shield * 120/100*RATIO, 33*RATIO)
     fill(255, 165, 0, 100);
-    textSize(28);
+    textSize(28*RATIO);
     textFont('Orbitron')
     textStyle(BOLD);
     // Center the text in the middle of the progress bar
     if (destroyer.shield === 100) {
-      text(`${destroyer.shield}%`, 80, 41);
+      text(`${destroyer.shield}%`, 80*RATIO, 41*RATIO);
     } else if (destroyer.shield < 100 && destroyer.shield > 0) {
-      text(`${destroyer.shield}%`, 95, 41);
+      text(`${destroyer.shield}%`, 95*RATIO, 41*RATIO);
     } else {
-      text(`${destroyer.shield}%`, 105, 41);
+      text(`${destroyer.shield}%`, 105*RATIO, 41*RATIO);
     }
   }
 
   levelUp(destroyer) {
     let lvlScores = BASED_SCORE * 2** this.level*this.difficulty;
-    text(`LV ${this.level}:`, 240, 41);
+    textSize(28*RATIO)
+    text(`LV ${this.level}:`, 240*RATIO, 41*RATIO);
 
     fill(255, 255, 255, 10);
-    rect(325, 15, 120, 33);
+    rect(325*RATIO, 15*RATIO, 120*RATIO, 33*RATIO);
     colorMode(RGB, 100);
     fill(255, 166, 77);
-    rect(325, 15, destroyer.scores * 120/lvlScores, 33)
+    rect(325*RATIO, 15*RATIO, destroyer.scores * 120/lvlScores*RATIO, 33*RATIO)
     
     colorMode(RGB, 60);
     fill(0, 128, 0);
-    textSize(23);
+    textSize(23*RATIO);
     if (destroyer.scores > 999) {
-      text(`${destroyer.scores}`, 352, 39);
+      text(`${destroyer.scores}`, 352*RATIO, 39*RATIO);
     } else if (destroyer.scores < 1000 && destroyer.scores >= 100) {
-      text(`${destroyer.scores}`, 355, 39);
+      text(`${destroyer.scores}`, 355*RATIO, 39*RATIO);
     } else if (destroyer.scores < 100 && destroyer.scores >= 10) {
-      text(`${destroyer.scores}`, 362, 39);
+      text(`${destroyer.scores}`, 362*RATIO, 39*RATIO);
     } else {
-      text(`${destroyer.scores}`, 375, 39);
+      text(`${destroyer.scores}`, 375*RATIO, 39*RATIO);
     }
 
     if (destroyer.scores > lvlScores) {
@@ -429,10 +430,10 @@ class Game {
 
   bossHealth(boss) {
     let health = (boss.noGetShotsBoss - boss.shots) * 120/boss.noGetShotsBoss
-    image(this.bossImg, width-100-120, 10, 50, 50);
+    image(this.bossImg, width-220*RATIO, 10*RATIO, 50*RATIO, 50*RATIO);
     colorMode(RGB, 60);
     fill(255, 255, 255, 10);
-    rect(60, 15, 120, 33);
+    rect(60*RATIO, 15*RATIO, 120*RATIO, 33*RATIO);
 
     // turn red if shield < 40%
     if (health*100 < 40) {
@@ -441,7 +442,7 @@ class Game {
       fill(0, 143, 17);
     }
 
-    rect(width-120-50, 15, health, 33)
+    rect(width-170*RATIO, 15*RATIO, health*RATIO, 33*RATIO)
   }
 
   keyPressed() {
@@ -481,41 +482,48 @@ class Game {
   // before starting the game
   preStart() {
     background(this.start1);
-    image(this.imageDestroyer1, width/2-112, height-270, 224, 150);
+    image(this.imageDestroyer1, width/2-(224*RATIO)/2, height-270*RATIO, 224*RATIO, 150*RATIO);
     textStyle(BOLD);
     textFont('Potta One');
-    textSize(54);
+    textSize(54*RATIO);
     textAlign(CENTER);
-    text('Universe Destruction', 10, 50, width);
+    text('Universe Destruction', 10, 50*RATIO, width);
 
     
-    textSize(38);
+    textSize(38*RATIO);
     fill("#00af91")
-    text('PRESS ENTER KEY TO START', 10, height/5, width);
+    text('PRESS ENTER KEY TO START', 10, height*RATIO/5, width);
 
-    textSize(32);
+    textSize(32*RATIO);
     fill("green")
-    text('DIFFICULTY', 10, height/1.4-40, width);
+    text('DIFFICULTY', 10, height/1.4-40*RATIO, width);
 
+    // textFont('Orbitron')
+    // textSize(35*RATIO);
+    // fill("white");
+    // text('Weed, The Destroyer', 0, height-100, width);
+    // textSize(26*RATIO);
+    // text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
+    // textAlign(LEFT)
     textFont('Orbitron')
-    textSize(35);
+    textSize(35*RATIO);
     fill("white");
-    text('Weed, The Destroyer', 0, height-100, width);
-    textSize(26);
-    text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
-    textAlign(LEFT)
+    text('Weed, The Destroyer', 0, (height-100*RATIO), width);
+    textSize(26*RATIO);
+    text("Don't feel bad when wiping all civilizations ", 0, height-50*RATIO, width);
+    textAlign(LEFT);
   }
 
   endGame() {
     // gameover, Your shield is down,
     background(this.youLoseBgr);
     textFont('Potta One');
-    textSize(60);
+    textSize(60*RATIO);
     textAlign(CENTER);
     text('YOU LOSE!', 0, 50, width);
     
     textFont('Orbitron')
-    textSize(45);
+    textSize(45*RATIO);
     text(`Your scores: ${this.destroyer.scores}`, 0, 170, width);
 
     // Ranking list, later
@@ -523,16 +531,16 @@ class Game {
     image(this.youLose, 0, height/2-(width*0.562/2), width, width*0.562);
 
     textFont('Potta One');
-    textSize(50);
+    textSize(50*RATIO);
     text('PRESS M TO REVENGE', 0, height/2 + (width*0.562/2) + 100, width);
 
 
     textFont('Orbitron')
-    textSize(35);
+    textSize(35*RATIO);
     fill("white");
-    text('Weed, The Destroyer', 0, height-100, width);
-    textSize(26);
-    text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
+    text('Weed, The Destroyer', 0, (height-100*RATIO), width);
+    textSize(26*RATIO);
+    text("Don't feel bad when wiping all civilizations ", 0, height-50*RATIO, width);
     textAlign(LEFT);
   }
 
@@ -541,14 +549,14 @@ class Game {
   winGame() {
     background(this.youLoseBgr);
     textFont('Potta One');
-    textSize(60);
+    textSize(60*RATIO);
     textAlign(CENTER);
     text('Congraturation!', 0, 20, width);
-    textSize(35);
+    textSize(35*RATIO);
     text('You have destroyed the entire universe!', 0, 100, width);
     
     textFont('Orbitron')
-    textSize(45);
+    textSize(45*RATIO);
     text(`Your scores: ${this.destroyer.scores}`, 0, height/2-(width*0.562/2)-60, width);
 
     // Ranking list, later
@@ -556,46 +564,49 @@ class Game {
     image(this.youWon, 0, height/2-(width*0.562/2), width, width*0.562);
 
     textFont('Potta One');
-    textSize(50);
+    textSize(50*RATIO);
     text('PRESS M TO REPLAY', 0, height/2 + (width*0.562/2) + 100, width);
 
 
     textFont('Orbitron')
-    textSize(35);
+    textSize(35*RATIO);
     fill("white");
-    text('Weed, The Destroyer', 0, height-100, width);
-    textSize(26);
-    text("Don't feel bad when wiping all civilizations ", 0, height-50, width);
+    text('Weed, The Destroyer', 0, (height-100*RATIO), width);
+    textSize(26*RATIO);
+    text("Don't feel bad when wiping all civilizations ", 0, height-50*RATIO, width);
     textAlign(LEFT);
   }
 
   setupDifficulty() {
-    this.buttonE = createButton('MEDIUM');
+    // Refactor later for a specific class in css file
+    this.buttonE = createButton('EASY');
     this.buttonE.parent("canvas");
-    // this.buttonE.style('font-family', 'Orbitron')
-    this.buttonE.style('font-size', '25px')
+    this.buttonE.style('font-size', `${25*RATIO}px`);
+    this.buttonE.style('padding', '0');
     this.buttonE.style('background-color', 'green');
-    this.buttonE.style('width', '120px');
+    this.buttonE.style('width', `${120*RATIO}px`);
     this.buttonE.style('position', 'relative');
-    this.buttonE.position(width/2-200, height/1.4);
+    this.buttonE.position(width/2-200*RATIO, (height/1.4));
     this.buttonE.mousePressed(this.difficulty = 2);
 
     this.buttonM = createButton('MEDIUM');
     this.buttonM.parent("canvas");
-    this.buttonM.style('font-size', '25px')
+    this.buttonM.style('font-size', `${25*RATIO}px`)
+    this.buttonM.style('padding', '0');
     this.buttonM.style('background-color', 'green');
-    this.buttonM.style('width', '120px');
+    this.buttonM.style('width', `${120*RATIO}px`);
     this.buttonM.style('position', 'relative');
-    this.buttonM.position(width/2-60, height/1.4);
+    this.buttonM.position(width/2-60*RATIO, height/1.4);
     this.buttonM.mousePressed(this.difficulty = 2);
 
     this.buttonH = createButton('HARD');
     this.buttonH.parent("canvas");
-    this.buttonH.style('font-size', '25px')
+    this.buttonH.style('font-size', `${25*RATIO}px`)
+    this.buttonM.style('padding', '0');
     this.buttonH.style('background-color', 'green');
-    this.buttonH.style('width', '120px');
+    this.buttonH.style('width', `${120*RATIO}px`);
     this.buttonH.style('position', 'relative');
-    this.buttonH.position(width/2+80, height/1.4);
+    this.buttonH.position(width/2+80*RATIO, height/1.4);
     this.buttonH.mousePressed(this.difficulty = 3);
   }
 
