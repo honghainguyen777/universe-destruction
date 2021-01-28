@@ -587,7 +587,7 @@ class Game {
     this.buttonE.style('width', `${120*RATIO}px`);
     this.buttonE.style('position', 'relative');
     this.buttonE.position(width/2-200*RATIO, (height/1.4));
-    this.buttonE.mousePressed(this.difficulty = 2);
+    this.buttonE.mousePressed(this.difficulty = 1);
 
     this.buttonM = createButton('MEDIUM');
     this.buttonM.parent("canvas");
