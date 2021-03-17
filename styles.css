@@ -12,23 +12,22 @@ body {
   height: 100vh;
   margin: 0;
   padding: 0;
-  }
+}
 
+@keyframes animated-border {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
+  }
+}
 
-  @keyframes animated-border {
-    0% {
-      box-shadow: 0 0 0 0 rgba(255,255,255,0.4);
-    }
-    100% {
-       box-shadow: 0 0 0 20px rgba(255,255,255,0);
-    }
-  }
-  
-  #canvas {
-    position: relative;
-    animation: animated-border 1.5s infinite;
-    line-height: 20px;
-    font-weight: bold;
-    border: 2px solid;
-    border-radius: 10px;
-  }
+#canvas {
+  position: relative;
+  animation: animated-border 1.5s infinite;
+  line-height: 20px;
+  font-weight: bold;
+  border: 2px solid;
+  border-radius: 10px;
+}
